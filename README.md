@@ -1,6 +1,12 @@
 # bip39-dotmap-variations
-Based on OneKeyHQ repository. 
+Originally based on OneKeyHQ repository: https://github.com/OneKeyHQ/bip39-dotmap
+
 Turn BIP39 words into dot map. Used 12 dots per word to record your mnemonic phrase in various ways to improve your encryption.
+
+*For maximum security you can use various dot mapping methods and use different BIP39 language seed words for the maximum level of security and encryption.*
+  
+  
+## Normal method:
 
 12 dots represent:
 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1
