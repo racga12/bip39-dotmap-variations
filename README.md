@@ -6,8 +6,17 @@ Turn BIP39 words into dot map. Used 12 dots per word to record your mnemonic phr
 *For maximum security you can use various dot mapping methods and use different BIP39 language seed words for the maximum level of security and encryption.*
 
 ### Wordlists
-https://github.com/racga12/bip39-dotmap-variations/blob/main/english.txt#
-  
+- [English BIP39 wordslist(mostly used)](https://github.com/racga12/bip39-dotmap-variations/blob/main/english.txt)
+- [Spanish BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/spanish.txt)
+- [Portuguese BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/portuguese.txt)
+-  [Korean BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/korean.txt)
+-  [Japanese BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/japanese.txt)
+-   [Italian BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/italian.txt)
+-    [Frech BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/french.txt)
+-  [Czech BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/czech.txt)
+-   [Chinese (traditional) BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/chinese_traditional.txt)
+
+
 ## Normal method:
 
 12 dots represent:
