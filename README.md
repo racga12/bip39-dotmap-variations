@@ -51,6 +51,8 @@ For instance:
 
 | ○○●● | ●●○● | ○○○● |
 
+[Practical example with 12 words seed phrase]()
+
 This table divides the 12 points into three columns to make it easier to read.
 
 | Index | Word     | Column1 | Column2 | Column3 |
