@@ -1,9 +1,20 @@
 # bip39-dotmap-variations
-Originally based on OneKeyHQ repository: https://github.com/OneKeyHQ/bip39-dotmap
 
-Turn BIP39 words into dot map. Used 12 dots per word to record your mnemonic phrase in various ways to improve your encryption.
+## WIP
 
-*For maximum security you can use various dot mapping methods and use different BIP39 language seed words for the maximum level of security and encryption.*
+<table style="border: none; border-collapse: collapse; width: 100%;">
+  <tr style="border: none;">
+    <td style="border: none; padding: 10px; width: 70%; vertical-align: top;">
+      Originally based on OneKeyHQ repository: <a href="https://github.com/OneKeyHQ/bip39-dotmap">https://github.com/OneKeyHQ/bip39-dotmap</a> 
+      </br></br>
+      Turn BIP39 words into dot map. Used 12 dots per word to record your mnemonic seed phrase, in addition the dot map can be encrypted to improve the security.</br></br>
+      <em>To achieve maximum security, you can use various encryption methods for point mapping and employ different languages, whenever possible, to attain a higher level of security.</em>
+    </td>
+    <td style="border: none; padding: 10px; width: 300px; vertical-align: top;">
+      <img src="https://github.com/racga12/bip39-dotmap-variations/blob/main/matrix-dotmap.jpg" alt="matrix dotmap"> </br>
+      <em>Example of empty 24 words dotmap</em>
+    </td>
+</table>
 
 ### Wordlists
 - [English BIP39 wordslist(mostly used)](https://github.com/racga12/bip39-dotmap-variations/blob/main/english.txt)
@@ -17,6 +28,13 @@ Turn BIP39 words into dot map. Used 12 dots per word to record your mnemonic phr
 -  [Chinese (traditional) BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/chinese_traditional.txt)
 -  [Chinese (simplified) BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/chinese_simplified.txt)
 
+## Suggested encryption methods
+
+- XOR Masking (Vernam Cipher)
+- Bit Permutation (P-Boxes)
+- Gray Code (Reflected Binary Code)
+- Circular Shift (Bit Rotation)
+- Matrix Multiplication over GF(2)
 
 ## Normal method:
 
