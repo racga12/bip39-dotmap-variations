@@ -11,7 +11,7 @@
       <em>To achieve maximum security, you can use various encryption methods for point mapping and employ different languages, whenever possible, to attain a higher level of security.</em>
     </td>
     <td style="border: none; padding: 10px; width: 300px; vertical-align: top;">
-      <img src="https://github.com/racga12/bip39-dotmap-variations/blob/main/matrix-dotmap.jpg" alt="matrix dotmap"> </br>
+      <img src="https://github.com/racga12/bip39-dotmap-variations/blob/main/images/matrix-dotmap.jpg" alt="matrix dotmap"> </br>
       <em>Example of empty 24 words dotmap</em>
     </td>
 </table>
@@ -51,7 +51,7 @@ For instance:
 
 | ○○●● | ●●○● | ○○○● |
 
-[Practical example with 12 words seed phrase]()
+[Practical example with 12 words seed phrase](https://github.com/racga12/bip39-dotmap-variations/wiki/Example-normal-method)
 
 This table divides the 12 points into three columns to make it easier to read.
 
