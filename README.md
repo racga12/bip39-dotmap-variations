@@ -12,9 +12,10 @@ Turn BIP39 words into dot map. Used 12 dots per word to record your mnemonic phr
 -  [Korean BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/korean.txt)
 -  [Japanese BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/japanese.txt)
 -   [Italian BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/italian.txt)
--    [Frech BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/french.txt)
+-  [Frech BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/french.txt)
 -  [Czech BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/czech.txt)
--   [Chinese (traditional) BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/chinese_traditional.txt)
+-  [Chinese (traditional) BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/chinese_traditional.txt)
+-  [Chinese (simplified) BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/chinese_simplified.txt)
 
 
 ## Normal method:
