@@ -17,16 +17,16 @@
 </table>
 
 ### Wordlists
-- [English BIP39 wordslist(mostly used)](https://github.com/racga12/bip39-dotmap-variations/blob/main/english.txt)
-- [Spanish BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/spanish.txt)
-- [Portuguese BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/portuguese.txt)
--  [Korean BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/korean.txt)
--  [Japanese BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/japanese.txt)
--   [Italian BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/italian.txt)
--  [Frech BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/french.txt)
--  [Czech BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/czech.txt)
--  [Chinese (traditional) BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/chinese_traditional.txt)
--  [Chinese (simplified) BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/chinese_simplified.txt)
+- [English BIP39 wordslist(mostly used)](https://github.com/racga12/bip39-dotmap-variations/blob/main/wordslists/english.txt)
+- [Spanish BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/wordslists/spanish.txt)
+- [Portuguese BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/wordslists/portuguese.txt)
+-  [Korean BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/wordslists/korean.txt)
+-  [Japanese BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/wordslists/japanese.txt)
+-   [Italian BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/wordslists/italian.txt)
+-  [Frech BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/wordslists/french.txt)
+-  [Czech BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/wordslists/czech.txt)
+-  [Chinese (traditional) BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/wordslists/chinese_traditional.txt)
+-  [Chinese (simplified) BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/wordslists/chinese_simplified.txt)
 
 ## Suggested encryption methods
 
