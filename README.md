@@ -30,7 +30,7 @@
 
 ## Suggested encryption methods
 
-- XOR Masking (Vernam Cipher)
+- [XOR Masking (Vernam Cipher)](https://github.com/racga12/bip39-dotmap-variations/wiki/XOR-Masking-(Vernam-Cipher))
 - Bit Permutation (P-Boxes)
 - Gray Code (Reflected Binary Code)
 - Circular Shift (Bit Rotation)
