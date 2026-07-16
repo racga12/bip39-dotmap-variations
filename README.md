@@ -25,6 +25,8 @@ Instead of storing recovery words in plain text—which is highly vulnerable to 
     </td>
 </table>
 
+---
+
 ### Features & Customization
 
 * **Enhanced Physical Security:** Shield your backup by converting highly recognizable plain-text recovery words into an abstract dot grid.
@@ -32,16 +34,33 @@ Instead of storing recovery words in plain text—which is highly vulnerable to 
 * **Highly Customizable:** Designed to be easily engraved or punched onto steel, titanium, or copper plates for fireproof and waterproof backups.
 
 ---
-
 ### Advanced Encryption Methods
 
-To achieve maximum security, you can encrypt the binary sequence *before* plotting the dots on the map. This ensures that even if someone finds your physical dot map, they cannot decode your seed phrase without knowing the decryption key or method.
+To achieve maximum security, you can encrypt your binary sequence *before* plotting the dots on the map. This ensures that even if someone finds your physical backup, they cannot decode your seed phrase without knowing the secret key or method.
 
-- [XOR Masking (Vernam Cipher)](https://github.com/racga12/bip39-dotmap-variations/wiki/XOR-Masking-(Vernam-Cipher))
-- Bit Permutation (P-Boxes)
-- Gray Code (Reflected Binary Code)
-- Circular Shift (Bit Rotation)
-- Matrix Multiplication over GF(2)
+Below is a technical comparison of the encryption and obfuscation methods supported or conceptualized in this project, rated by their security level and ease of manual recovery (in case you need to decrypt your seed with just pen and paper).
+
+#### Overall Top 5 Method Comparison
+
+| Rank | Method | Primary Benefit | Security | Manual Recovery | Best Used For |
+| :---: | :--- | :--- | :---: | :---: | :--- |
+| **#1** | **[XOR Masking (Vernam)](https://github.com/racga12/bip39-dotmap-variations/wiki/XOR-Masking-(Vernam-Cipher))** | Unbreakable, easy to compute by hand. | ⭐⭐⭐⭐⭐ | Easy | Maximum mathematical security with simple physical recovery. |
+| **#2** | **Shamir's Secret Sharing** | Eliminates single points of physical failure. | ⭐⭐⭐⭐⭐ | Complex | Multi-location backups to protect against theft, fire, or loss. |
+| **#3** | **Decoy Dots (Steganography)** | Hides the backup in plain sight. | ⭐⭐⭐⭐☆ | Easy | Confusing physical intruders by burying real data in visual noise. |
+| **#4** | **Matrix Mult. over $GF(2)$** | High mathematical diffusion of data. | ⭐⭐⭐⭐☆ | Difficult | Scrambling visual patterns completely so no two words look alike. |
+| **#5** | **Salted Hashing (Truncated)** | One-way protection against physical theft. | ⭐⭐⭐⭐☆ | Impossible | High-security backups where recovery is strictly software-assisted. |
+
+#### Easy Manual Recovery Methods 
+
+| Rank | Method | Security | Manual Complexity | Recovery Tool Needed | Best Suited For |
+| :---: | :--- | :---: | :---: | :--- | :--- |
+| **#1** | **[XOR Masking (Vernam)](https://github.com/racga12/bip39-dotmap-variations/wiki/XOR-Masking-(Vernam-Cipher))** | ⭐⭐⭐⭐⭐ | **Easy** | Pen and paper (Logical XOR rules) | Unbreakable mathematical security with instant manual decryption. |
+| **#2** | **Decoy Dots (Steganography)** | ⭐⭐⭐⭐☆ | **Very Easy** | A physical cutout template (Overlay) | Hiding the backup in plain sight; zero math required to decrypt. |
+| **#3** | **Bit Permutation (P-Boxes)** | ⭐⭐⭐☆☆ | **Medium** | A grid-reordering reference card | Preventing visual pattern recognition of the BIP39 indices. |
+| **#4** | **Circular Shift (Rotation)** | ⭐⭐☆☆☆ | **Very Easy** | Mental math (Shifting columns/rows) | Quick and simple obfuscation that can be calculated in seconds. |
+| **#5** | **Gray Code (Reflected)** | ☆☆☆☆☆ | **Easy** | A binary-to-Gray conversion table | Preventing physical reading errors (Not for encryption). |
+
+---
 
 ### BIP 39 wordlists _(from bips repo by Bitcoin)_
 
