@@ -7,7 +7,17 @@
     <td style="border: none; padding: 10px; width: 70%; vertical-align: top;">
       Originally based on OneKeyHQ repository: <a href="https://github.com/OneKeyHQ/bip39-dotmap">https://github.com/OneKeyHQ/bip39-dotmap</a> 
       </br></br>
-      Turn BIP39 words into dot map. Used 12 dots per word to record your mnemonic seed phrase, in addition the dot map can be encrypted to improve the security.</br></br>
+      A secure, educational method to convert cryptocurrency BIP39 mnemonic seed phrases (12 or 24 words) into a visual, binary dot map representation.
+</br></br>
+      <b>How It Works</b></br>
+  
+Instead of storing recovery words in plain text—which is highly vulnerable to physical theft or unauthorized glances—this method translates each word's index (from 1 to 2048 in the BIP39 wordlist) into a **12-bit binary sequence**.
+
+1. **Word to Index:** Each word is matched to its corresponding index number (1 to 2048) in the standard BIP39 list.
+2. **Index to Binary:** The index number is converted into a 12-digit binary format (using `0`s and `1`s).
+3. **Binary to Dots:** Each `1` represents a dot and each `0` represents an empty space (or vice versa), resulting in a grid of **12 dots per word**.
+4. **Grid Generation:** Fully supports both 12-word (144-dot grid) and 24-word (288-dot grid) seed phrases, making it ideal for engraving on durable physical mediums like metal plates.
+
       <em>To achieve maximum security, you can use various encryption methods for point mapping and employ different languages, whenever possible, to attain a higher level of security.</em>
     </td>
     <td style="border: none; padding: 10px; width: 300px; vertical-align: top;">
