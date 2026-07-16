@@ -43,17 +43,18 @@ To achieve maximum security, you can encrypt the binary sequence *before* plotti
 - Circular Shift (Bit Rotation)
 - Matrix Multiplication over GF(2)
 
-### Wordlists
-- [English BIP39 wordslist(mostly used)](https://github.com/racga12/bip39-dotmap-variations/blob/main/wordslists/english.txt)
-- [Spanish BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/wordslists/spanish.txt)
-- [Portuguese BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/wordslists/portuguese.txt)
--  [Korean BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/wordslists/korean.txt)
--  [Japanese BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/wordslists/japanese.txt)
--   [Italian BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/wordslists/italian.txt)
--  [Frech BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/wordslists/french.txt)
--  [Czech BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/wordslists/czech.txt)
--  [Chinese (traditional) BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/wordslists/chinese_traditional.txt)
--  [Chinese (simplified) BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/wordslists/chinese_simplified.txt)
+### BIP 39 wordlists _(from bips repo by Bitcoin)_
+
+* [English](https://github.com/bitcoin/bips/blob/master/bip-0039/english.txt)
+* [Japanese](https://github.com/bitcoin/bips/blob/master/bip-0039/japanese.txt)
+* [Korean](https://github.com/bitcoin/bips/blob/master/bip-0039/korean.txt)
+* [Spanish](https://github.com/bitcoin/bips/blob/master/bip-0039/spanish.txt)
+* [Chinese (Simplified)](https://github.com/bitcoin/bips/blob/master/bip-0039/chinese_simplified.txt)
+* [Chinese (Traditional)](https://github.com/bitcoin/bips/blob/master/bip-0039/chinese_traditional.txt)
+* [French](https://github.com/bitcoin/bips/blob/master/bip-0039/french.txt)
+* [Italian](https://github.com/bitcoin/bips/blob/master/bip-0039/italian.txt)
+* [Czech](https://github.com/bitcoin/bips/blob/master/bip-0039/czech.txt)
+* [Portuguese](https://github.com/bitcoin/bips/blob/master/bip-0039/portuguese.txt)
 
 ## Normal method:
 
