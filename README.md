@@ -9,7 +9,8 @@
       </br></br>
       A secure, educational method to convert cryptocurrency BIP39 mnemonic seed phrases (12 or 24 words) into a visual, binary dot map representation.
 </br></br>
-      <b>How It Works</b></br>
+  
+ ### How It Works
   
 Instead of storing recovery words in plain text—which is highly vulnerable to physical theft or unauthorized glances—this method translates each word's index (from 1 to 2048 in the BIP39 wordlist) into a **12-bit binary sequence**.
 
@@ -17,14 +18,30 @@ Instead of storing recovery words in plain text—which is highly vulnerable to 
 2. **Index to Binary:** The index number is converted into a 12-digit binary format (using `0`s and `1`s).
 3. **Binary to Dots:** Each `1` represents a dot and each `0` represents an empty space (or vice versa), resulting in a grid of **12 dots per word**.
 4. **Grid Generation:** Fully supports both 12-word (144-dot grid) and 24-word (288-dot grid) seed phrases, making it ideal for engraving on durable physical mediums like metal plates.
-
-      <em>To achieve maximum security, you can use various encryption methods for point mapping and employ different languages, whenever possible, to attain a higher level of security.</em>
     </td>
     <td style="border: none; padding: 10px; width: 300px; vertical-align: top;">
       <img src="https://github.com/racga12/bip39-dotmap-variations/blob/main/images/matrix-dotmap.jpg" alt="matrix dotmap"> </br>
       <em>Example of empty 24 words dotmap</em>
     </td>
 </table>
+
+### Features & Customization
+
+* **Enhanced Physical Security:** Shield your backup by converting highly recognizable plain-text recovery words into an abstract dot grid.
+* **Multi-Language Support:** Easily swap BIP39 wordlists (English, Spanish, Japanese, etc.) during translation to add an extra layer of obscurity.
+* **Highly Customizable:** Designed to be easily engraved or punched onto steel, titanium, or copper plates for fireproof and waterproof backups.
+
+---
+
+### Advanced Encryption Methods
+
+To achieve maximum security, you can encrypt the binary sequence *before* plotting the dots on the map. This ensures that even if someone finds your physical dot map, they cannot decode your seed phrase without knowing the decryption key or method.
+
+- [XOR Masking (Vernam Cipher)](https://github.com/racga12/bip39-dotmap-variations/wiki/XOR-Masking-(Vernam-Cipher))
+- Bit Permutation (P-Boxes)
+- Gray Code (Reflected Binary Code)
+- Circular Shift (Bit Rotation)
+- Matrix Multiplication over GF(2)
 
 ### Wordlists
 - [English BIP39 wordslist(mostly used)](https://github.com/racga12/bip39-dotmap-variations/blob/main/wordslists/english.txt)
@@ -37,14 +54,6 @@ Instead of storing recovery words in plain text—which is highly vulnerable to 
 -  [Czech BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/wordslists/czech.txt)
 -  [Chinese (traditional) BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/wordslists/chinese_traditional.txt)
 -  [Chinese (simplified) BIP39 wordslist](https://github.com/racga12/bip39-dotmap-variations/blob/main/wordslists/chinese_simplified.txt)
-
-## Suggested encryption methods
-
-- [XOR Masking (Vernam Cipher)](https://github.com/racga12/bip39-dotmap-variations/wiki/XOR-Masking-(Vernam-Cipher))
-- Bit Permutation (P-Boxes)
-- Gray Code (Reflected Binary Code)
-- Circular Shift (Bit Rotation)
-- Matrix Multiplication over GF(2)
 
 ## Normal method:
 
