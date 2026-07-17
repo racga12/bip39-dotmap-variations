@@ -5,8 +5,12 @@
 
 ## Table of Contents
 1. [How It Works](#How-It-Works)
-2. [Getting Started](#getting-started)
-
+2. [Features & Customization](#Features-&-Customization)
+3. [Interactive Web Application Guide](#Interactive-Web-Application-Guide)
+4. [Overview of Additional Encryption Methods](#Overview-of-Additional-Encryption-Methods)
+5. [Theoretical Logic & Manual Offline Encryption/Decryption](#-theoretical-logic--manual-offline-encryptiondecryption)
+6. [BIP 39 wordlists](#BIP-39-wordlists)
+7. [Normal Method](#Normal-method)
 
 <table style="border: none; border-collapse: collapse; width: 100%;">
   <tr style="border: none;">
@@ -135,7 +139,9 @@ To achieve maximum security (so that you do not have to trust any machine or com
 * [Czech](https://github.com/bitcoin/bips/blob/master/bip-0039/czech.txt)
 * [Portuguese](https://github.com/bitcoin/bips/blob/master/bip-0039/portuguese.txt)
 
-## Normal method:
+### Normal Method:
+
+This method is more secure than writing the seed phrase in plain text on a card, but there is a risk of it being easily decrypted, so it is advisable to apply an additional layer of encryption.
 
 12 dots represent:
 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1
