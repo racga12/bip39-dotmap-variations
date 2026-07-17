@@ -4,7 +4,7 @@
 
 
 ## Table of Contents
-1. [How It Works](#How-It-Works)
+1. [How It Works](#how-it-works)
 2. [Features & Customization](#Features-&-Customization)
 3. [Interactive Web Application Guide](#Interactive-Web-Application-Guide)
 4. [Overview of Additional Encryption Methods](#Overview-of-Additional-Encryption-Methods)
@@ -49,6 +49,8 @@ Instead of storing recovery words in plain text—which is highly vulnerable to 
 
 This repository includes a secure, self-hosted web-based visualization utility. It automates word validation, language mapping, binary dot map visualization, advanced encryption (XOR / Bit Permutation), and hex/decimal bytearray encoding.
 
+[For know more about internal mechanics, security measures, and cryptographic flows of the application visit wiki documentation](https://github.com/racga12/bip39-dotmap-variations/wiki/BIP39-Mnemonic-Dotmap-Visualizer-Documentation)
+
 #### 🚀 How to Install and Run Locally
 To maintain maximum security, you should run this application in a completely offline environment.
 
@@ -74,16 +76,7 @@ To maintain maximum security, you should run this application in a completely of
 #### 🔒 Safe Offline Workflow (Air-Gapped Security)
 Since your recovery seed phrase governs the security of your cryptocurrency assets, **NEVER** type your seed phrase into a computer that is connected to the internet. Follow this safe workflow:
 
-1. **Download the Repository:** Download the repository source code onto a USB flash drive.
-2. **Air-Gapped OS Boot:** Boot a secure offline machine or load an offline Live OS (such as *Tails* or an *Ubuntu Live USB*) with network connections completely disabled (no Wi-Fi, no Ethernet).
-3. **Transfer and Run:** Transfer the project files from your USB drive, start the server using `python app.py`, and open the application.
-4. **Private Incognito Window:** Access the interface in an **Incognito / Private Window** with all browser extensions/add-ons disabled to prevent background tools or keyloggers from scraping page content.
-5. **Secure Input:** Hand-type your words directly into the input area. The application's input sanitization layers will automatically strip null bytes (`\x00`) and limit input lengths to prevent buffer errors.
-6. **Post-Output Cleanup Checklist:** Once your dot map is generated and safely recorded or engraved:
-   - Copy a random dummy string (e.g., "abc") to overwrite your clipboard.
-   - Close all browser tabs and windows.
-   - Terminate the local Flask server process in your terminal (`Ctrl+C`).
-   - Reboot/restart your computer to completely flush the volatile RAM.
+[Recommended Workflow](https://github.com/racga12/bip39-dotmap-variations/wiki/BIP39-Mnemonic-Dotmap-Visualizer-Documentation#recommended-air-gapped-physical-workflow)
 
 ---
 ### Overview of Additional Encryption Methods
