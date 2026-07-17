@@ -18,19 +18,5 @@ Loaded wordlist: Spanish (2048 words)
  * Restarting with stat
  * Debugger is active!
  * Debugger PIN: 631-326-424
-127.0.0.1 - - [17/Jul/2026 06:45:16] "GET / HTTP/1.1" 200 -
-127.0.0.1 - - [17/Jul/2026 06:45:17] "POST / HTTP/1.1" 200 -
- * Detected change in '/app/app.py', reloading
-Loaded wordlist: Chinese Simplified (2048 words)
-Loaded wordlist: Chinese Traditional (2048 words)
-Loaded wordlist: Czech (2048 words)
-Loaded wordlist: English (2048 words)
-Loaded wordlist: French (2048 words)
-Loaded wordlist: Italian (2048 words)
-Loaded wordlist: Japanese (2048 words)
-Loaded wordlist: Korean (2048 words)
-Loaded wordlist: Portuguese (2048 words)
-Loaded wordlist: Spanish (2048 words)
- * Restarting with stat
- * Debugger is active!
- * Debugger PIN: 631-326-424
+127.0.0.1 - - [17/Jul/2026 07:11:34] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jul/2026 07:11:36] "POST / HTTP/1.1" 200 -
