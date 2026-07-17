@@ -9,7 +9,7 @@
 3. [Interactive Web Application Guide](#Interactive-Web-Application-Guide)
 4. [Overview of Additional Encryption Methods](#Overview-of-Additional-Encryption-Methods)
 5. [Theoretical Logic & Manual Offline Encryption/Decryption](#-theoretical-logic--manual-offline-encryptiondecryption)
-6. [BIP 39 wordlists](#BIP-39-wordlists)
+6. [BIP 39 wordlists](#bip-39-wordlists-from-bips-repo-by-bitcoin)
 7. [Normal Method](#Normal-method)
 
 <table style="border: none; border-collapse: collapse; width: 100%;">
