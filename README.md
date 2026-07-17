@@ -5,7 +5,7 @@
 
 ## Table of Contents
 1. [How It Works](#how-it-works)
-2. [Features & Customization](#Features-&-Customization)
+2. [Features & Customization](#features--customization)
 3. [Interactive Web Application Guide](#Interactive-Web-Application-Guide)
 4. [Overview of Additional Encryption Methods](#Overview-of-Additional-Encryption-Methods)
 5. [Theoretical Logic & Manual Offline Encryption/Decryption](#-theoretical-logic--manual-offline-encryptiondecryption)
