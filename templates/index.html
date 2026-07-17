@@ -181,8 +181,8 @@
             <h3 class="border-bottom pb-2 mb-4 fw-bold text-dark">Safe Bytearray Transformation Output</h3>
 
             <!-- Raw Words Bytearray -->
-            <div class="mb-4">
-                <h5 class="fw-bold text-secondary">1. Exact Words Input Bytearray (UTF-8 Encoded)</h5>
+            <div class="mb-2">
+                <h5 class="fw-bold text-secondary">Exact Words Input Bytearray (UTF-8 Encoded)</h5>
                 <p class="text-muted small mb-2">
                     This represents the raw string representation of the parsed words (joined by a single space) converted to a safe bytearray.
                 </p>
@@ -190,20 +190,6 @@
                 <div class="bytearray-box mb-2">{{ raw_words_bytearray_hex if raw_words_bytearray_hex else 'Empty' }}</div>
                 <div><strong>Integer Decimal Array:</strong></div>
                 <div class="bytearray-box">{{ raw_words_bytearray_list if raw_words_bytearray_list else 'Empty' }}</div>
-            </div>
-
-            <!-- Indices Bytearray -->
-            <div>
-                <h5 class="fw-bold text-secondary">2. BIP39 Word Indices Bytearray (Big-Endian, 2 Bytes Per Index)</h5>
-                <p class="text-muted small mb-2">
-                    This represents the exact list of matched 1-based indices in the BIP39 wordlist represented as a 16-bit integer (2-byte) big-endian array. Unmatched words are omitted.
-                </p>
-                <div class="mb-2"><strong>List of indices:</strong></div>
-                <div class="bytearray-box mb-2">{{ word_indices_list }}</div>
-                <div class="mb-2"><strong>Hex String:</strong></div>
-                <div class="bytearray-box mb-2">{{ indices_bytearray_hex if indices_bytearray_hex else 'Empty' }}</div>
-                <div><strong>Integer Decimal Array:</strong></div>
-                <div class="bytearray-box">{{ indices_bytearray_list if indices_bytearray_list else 'Empty' }}</div>
             </div>
         </div>
 
@@ -240,7 +226,6 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <p class="small text-muted mb-0">Use this app at your own risk.</p>
                         <button type="button" class="btn btn-warning text-dark fw-bold" data-bs-dismiss="modal">I Understand, Proceed Safely</button>
                     </div>
                 </div>
@@ -293,7 +278,7 @@
         <!-- Educational Footer -->
         <footer class="mt-5 text-center text-muted py-4 border-top">
             <p class="mb-1"><strong>BIP39 Mnemonic Dotmap Visualizer</strong></p>
-            <p class="small mb-0">Designed as a secure offline system to plot recovery seeds visually on durable mediums like metal plates. Made by racga12</p>
+            <p class="small mb-0">Designed as a secure offline system to plot recovery seeds visually on durable mediums like metal plates.</p>
         </footer>
     </div>
 
