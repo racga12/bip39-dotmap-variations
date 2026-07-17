@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIP39 Mnemonic Dotmap Visualizer</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+        }
+        .container {
+            max-width: 960px;
+        }
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        .header-section {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        .dotmap-table {
+            font-family: monospace;
+            font-size: 1.15rem;
+        }
+        .dot-0 {
+            color: #6c757d; /* Gray */
+            font-weight: normal;
+        }
+        .dot-1 {
+            color: #0d6efd; /* Blue/Active */
+            font-weight: bold;
+        }
+        .bytearray-box {
+            background-color: #212529;
+            color: #f8f9fa;
+            font-family: monospace;
+            padding: 1rem;
+            border-radius: 6px;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+        .unmatched-row {
+            background-color: #f8d7da !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <!-- Header -->
+        <div class="header-section text-center">
+            <h1 class="display-5 fw-bold">BIP39 Mnemonic Dotmap</h1>
+            <p class="lead mb-0">Transform 12 to 24 recovery words into safe bytearrays and interactive binary dot maps</p>
+        </div>
+
+        <!-- Form Card -->
+        <div class="card p-4 mb-4">
+            <form method="POST" action="/">
+                <div class="row g-3">
+                    <!-- Language Selection -->
+                    <div class="col-md-6">
+                        <label for="language" class="form-label fw-bold">Select Wordlist Language</label>
+                        <select name="language" id="language" class="form-select form-select-lg">
+                            {% for lang in languages %}
+                            <option value="{{ lang.key }}" {% if lang.key == selected_language %}selected{% endif %}>
+                                {{ lang.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6 d-flex align-items-end">
+                        <p class="text-muted small mb-2">
+                            Select the language matching your recovery phrase words. Wordlists are loaded directly from BIP39 reference txt files.
+                        </p>
+                    </div>
+
+                    <!-- Word Input -->
+                    <div class="col-12 mt-4">
+                        <label for="words" class="form-label fw-bold">Enter Mnemonic Words (12 to 24 words)</label>
+                        <textarea class="form-control" name="words" id="words" rows="5" placeholder="Enter your 12 to 24 words separated by spaces, commas, or newlines..." required>{{ words_input }}</textarea>
+                        <div class="form-text">
+                            Strict input filtering is active to prevent any potential buffer issues or core dumps. Max input length: 10,000 characters. Null bytes are stripped automatically.
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="col-12 mt-4 text-end">
+                        <button type="submit" class="btn btn-primary btn-lg px-5">Generate Dotmap</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Error/Warning Alerts -->
+        {% if error_msg %}
+        <div class="alert alert-warning border-0 shadow-sm mb-4" role="alert">
+            <h5 class="alert-heading fw-bold">Validation Status</h5>
+            <p class="mb-0">{{ error_msg }}</p>
+        </div>
+        {% endif %}
+
+        <!-- Results Card -->
+        {% if results %}
+        <div class="card p-4 mb-4">
+            <h3 class="border-bottom pb-2 mb-4 fw-bold text-dark">Visualization & Dot Map Table</h3>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped align-middle dotmap-table">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col" style="width: 80px;">#</th>
+                            <th scope="col">Original Word</th>
+                            <th scope="col">Wordlist Index (1-2048)</th>
+                            <th scope="col" class="text-center" style="letter-spacing: 2px;">12-Bit Dot Map Representation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in results %}
+                        <tr class="{% if not row.match_found %}unmatched-row{% endif %}">
+                            <th scope="row">{{ row.num }}</th>
+                            <td>
+                                <strong>{{ row.original }}</strong>
+                                {% if not row.match_found %}
+                                <span class="badge bg-danger ms-2">Unmatched</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if row.match_found %}
+                                    <span class="badge bg-success fs-6">{{ row.index }}</span>
+                                {% else %}
+                                    <span class="text-danger fw-bold">NOT FOUND</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-center fs-4 font-monospace">
+                                {% if row.match_found %}
+                                    {% for char in row.dot_map %}
+                                        <span class="{% if char == '●' %}dot-1{% else %}dot-0{% endif %}">{{ char }}</span>
+                                    {% endfor %}
+                                    <div class="text-muted small mt-1 fs-6 font-monospace" style="letter-spacing: 1px;">
+                                        ({{ row.binary }})
+                                    </div>
+                                {% else %}
+                                    <span class="text-danger fw-bold fs-6">N/A</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Safe Bytearray Card -->
+        <div class="card p-4">
+            <h3 class="border-bottom pb-2 mb-4 fw-bold text-dark">Safe Bytearray Transformation Output</h3>
+
+            <!-- Raw Words Bytearray -->
+            <div class="mb-4">
+                <h5 class="fw-bold text-secondary">1. Exact Words Input Bytearray (UTF-8 Encoded)</h5>
+                <p class="text-muted small mb-2">
+                    This represents the raw string representation of the parsed words (joined by a single space) converted to a safe bytearray.
+                </p>
+                <div class="mb-2"><strong>Hex String:</strong></div>
+                <div class="bytearray-box mb-2">{{ raw_words_bytearray_hex if raw_words_bytearray_hex else 'Empty' }}</div>
+                <div><strong>Integer Decimal Array:</strong></div>
+                <div class="bytearray-box">{{ raw_words_bytearray_list if raw_words_bytearray_list else 'Empty' }}</div>
+            </div>
+
+            <!-- Indices Bytearray -->
+            <div>
+                <h5 class="fw-bold text-secondary">2. BIP39 Word Indices Bytearray (Big-Endian, 2 Bytes Per Index)</h5>
+                <p class="text-muted small mb-2">
+                    This represents the exact list of matched 1-based indices in the BIP39 wordlist represented as a 16-bit integer (2-byte) big-endian array. Unmatched words are omitted.
+                </p>
+                <div class="mb-2"><strong>List of indices:</strong></div>
+                <div class="bytearray-box mb-2">{{ word_indices_list }}</div>
+                <div class="mb-2"><strong>Hex String:</strong></div>
+                <div class="bytearray-box mb-2">{{ indices_bytearray_hex if indices_bytearray_hex else 'Empty' }}</div>
+                <div><strong>Integer Decimal Array:</strong></div>
+                <div class="bytearray-box">{{ indices_bytearray_list if indices_bytearray_list else 'Empty' }}</div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Educational Footer -->
+        <footer class="mt-5 text-center text-muted py-4 border-top">
+            <p class="mb-1"><strong>BIP39 Mnemonic Dotmap Visualizer</strong></p>
+            <p class="small mb-0">Designed as a secure offline system to plot recovery seeds visually on durable mediums like metal plates.</p>
+        </footer>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
