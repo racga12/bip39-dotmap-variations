@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIP39 Mnemonic Dotmap Visualizer</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+        }
+        .container {
+            max-width: 960px;
+        }
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        .header-section {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        .dotmap-table {
+            font-family: monospace;
+            font-size: 1.15rem;
+        }
+        .dot-0 {
+            color: #6c757d; /* Gray */
+            font-weight: normal;
+        }
+        .dot-1 {
+            color: #0d6efd; /* Blue/Active */
+            font-weight: bold;
+        }
+        .bytearray-box {
+            background-color: #212529;
+            color: #f8f9fa;
+            font-family: monospace;
+            padding: 1rem;
+            border-radius: 6px;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+        .unmatched-row {
+            background-color: #f8d7da !important;
+        }
+        .security-banner {
+            border-left: 5px solid #ffc107;
+            background-color: #fffbeb;
+        }
+        .post-security-banner {
+            border-left: 5px solid #0dcaf0;
+            background-color: #f0faff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <!-- Header -->
+        <div class="header-section text-center">
+            <h1 class="display-5 fw-bold">BIP39 Mnemonic Dotmap</h1>
+            <p class="lead mb-0">Transform 12 to 24 recovery words into safe bytearrays and interactive binary dot maps</p>
+        </div>
+
+        <!-- Security Manual Trigger Buttons -->
+        <div class="d-flex justify-content-center gap-3 mb-4">
+            <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#beforeSecurityModal">
+                ⚠️ View Pre-Input Security Advice
+            </button>
+            <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#afterSecurityModal">
+                🔒 View Post-Output Checklist
+            </button>
+        </div>
+
+        <!-- Form Card -->
+        <div class="card p-4 mb-4">
+            <form method="POST" action="/">
+                <div class="row g-3">
+                    <!-- Language Selection -->
+                    <div class="col-md-6">
+                        <label for="language" class="form-label fw-bold">Select Wordlist Language</label>
+                        <select name="language" id="language" class="form-select form-select-lg">
+                            {% for lang in languages %}
+                            <option value="{{ lang.key }}" {% if lang.key == selected_language %}selected{% endif %}>
+                                {{ lang.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Advanced Encryption Options -->
+                    <div class="col-md-6">
+                        <label for="encryption_method" class="form-label fw-bold">Advanced Encryption Method</label>
+                        <select name="encryption_method" id="encryption_method" class="form-select form-select-lg">
+                            <option value="none" {% if encryption_method == 'none' %}selected{% endif %}>None (Normal Dot Map)</option>
+                            <option value="xor" {% if encryption_method == 'xor' %}selected{% endif %}>XOR Masking (Vernam Cipher)</option>
+                            <option value="permutation" {% if encryption_method == 'permutation' %}selected{% endif %}>Bit Permutation (P-Boxes)</option>
+                        </select>
+                    </div>
+
+                    <!-- Word Input -->
+                    <div class="col-12 mt-4">
+                        <label for="words" class="form-label fw-bold">Enter Mnemonic Words (12 to 24 words)</label>
+                        <textarea class="form-control" name="words" id="words" rows="5" placeholder="Enter your 12 to 24 words separated by spaces, commas, or newlines..." required>{{ words_input }}</textarea>
+                        <div class="form-text text-danger">
+                            🔒 <strong>Privacy Check:</strong> Input sanitization is active. Safe bytearray processing limits inputs to 10,000 characters and strips null bytes automatically to prevent exploit vectors or core dumps.
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="col-12 mt-4 text-end">
+                        <button type="submit" class="btn btn-primary btn-lg px-5">Generate Dotmap</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Error/Warning Alerts -->
+        {% if error_msg %}
+        <div class="alert alert-warning border-0 shadow-sm mb-4" role="alert">
+            <h5 class="alert-heading fw-bold">Validation Status</h5>
+            <p class="mb-0">{{ error_msg }}</p>
+        </div>
+        {% endif %}
+
+        <!-- Decryption Key & Manual Decryption Guide Card -->
+        {% if results and encryption_method != 'none' %}
+        <div class="card p-4 mb-4 border-warning" style="border-width: 2px;">
+            <h3 class="border-bottom pb-2 mb-4 fw-bold text-warning">🔑 Manual Decryption Keys & Guide</h3>
+
+            {% if encryption_method == 'xor' %}
+            <p><strong>XOR Masking active:</strong> Each word's unencrypted dot map was XOR'ed with a unique, cryptographically secure 12-bit random key. To manually retrieve your original dot map, calculate the logical XOR of the Encrypted Dot Map and its corresponding key.</p>
+            <div class="alert alert-light border shadow-sm">
+                <h5 class="fw-bold">💡 How to Decrypt Manually:</h5>
+                <p class="mb-1">Compare the encrypted dots with the key dots column by column:</p>
+                <ul class="mb-0">
+                    <li>If both are empty (○○) or both are filled (●●), the decrypted dot is **empty (○)** (0 ^ 0 = 0, 1 ^ 1 = 0).</li>
+                    <li>If they are different (○● or ●○), the decrypted dot is **filled (●)** (0 ^ 1 = 1, 1 ^ 0 = 1).</li>
+                </ul>
+            </div>
+
+            <div class="table-responsive mt-3">
+                <table class="table table-bordered table-striped align-middle dotmap-table">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col" style="width: 80px;">#</th>
+                            <th scope="col">Word</th>
+                            <th scope="col" class="text-center">Decryption Key (Vernam)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in results %}
+                        {% if row.match_found %}
+                        <tr>
+                            <th scope="row">{{ row.num }}</th>
+                            <td><strong>{{ row.original }}</strong></td>
+                            <td class="text-center fs-4 font-monospace text-warning">
+                                {% for char in row.xor_key_dot_map %}
+                                    <span class="{% if char == '●' %}dot-1{% else %}dot-0{% endif %}">{{ char }}</span>
+                                {% endfor %}
+                                <div class="text-muted small mt-1 fs-6 font-monospace" style="letter-spacing: 1px;">
+                                    ({{ row.xor_key_binary }})
+                                </div>
+                            </td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% elif encryption_method == 'permutation' %}
+            <p><strong>Bit Permutation active:</strong> All 12 columns of the dot map have been shuffled according to a cryptographically strong random permutation sequence. This prevents visual pattern recognition of your BIP39 indices.</p>
+
+            <div class="alert alert-light border shadow-sm">
+                <h5 class="fw-bold">💡 How to Decrypt Manually:</h5>
+                <p class="mb-0">Use the following reference mapping card to re-order the columns. For each index, find the corresponding column number of the encrypted dot map and copy its state (○ or ●) back to the original index position.</p>
+            </div>
+
+            <div class="row g-3 justify-content-center">
+                <div class="col-md-8">
+                    <div class="card bg-dark text-white p-3">
+                        <h6 class="fw-bold text-center text-warning mb-3">COLUMN RE-ORDERING REFERENCE CARD</h6>
+                        <div class="table-responsive">
+                            <table class="table table-dark table-bordered text-center align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-warning">Original Position</th>
+                                        {% for m in decryption_mapping %}
+                                        <th>{{ m.original_pos }}</th>
+                                        {% endfor %}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="text-warning">Read From Encrypted Col</td>
+                                        {% for m in decryption_mapping %}
+                                        <td class="fw-bold text-info fs-5">{{ m.encrypted_pos }}</td>
+                                        {% endfor %}
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- Results Card -->
+        {% if results %}
+        <div class="card p-4 mb-4">
+            <h3 class="border-bottom pb-2 mb-4 fw-bold text-dark">
+                {% if encryption_method == 'none' %}
+                    Visualization & Dot Map Table
+                {% else %}
+                    🔐 Encrypted Visual Dot Map Table
+                {% endif %}
+            </h3>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped align-middle dotmap-table">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col" style="width: 80px;">#</th>
+                            <th scope="col">Original Word</th>
+                            <th scope="col">Wordlist Index (1-2048)</th>
+                            <th scope="col" class="text-center" style="letter-spacing: 2px;">
+                                {% if encryption_method == 'none' %}
+                                    12-Bit Dot Map Representation
+                                {% else %}
+                                    🔒 Encrypted 12-Bit Dot Map Representation
+                                {% endif %}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in results %}
+                        <tr class="{% if not row.match_found %}unmatched-row{% endif %}">
+                            <th scope="row">{{ row.num }}</th>
+                            <td>
+                                <strong>{{ row.original }}</strong>
+                                {% if not row.match_found %}
+                                <span class="badge bg-danger ms-2">Unmatched</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if row.match_found %}
+                                    <span class="badge bg-success fs-6">{{ row.index }}</span>
+                                {% else %}
+                                    <span class="text-danger fw-bold">NOT FOUND</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-center fs-4 font-monospace">
+                                {% if row.match_found %}
+                                    {% if encryption_method == 'none' %}
+                                        {% for char in row.dot_map %}
+                                            <span class="{% if char == '●' %}dot-1{% else %}dot-0{% endif %}">{{ char }}</span>
+                                        {% endfor %}
+                                        <div class="text-muted small mt-1 fs-6 font-monospace" style="letter-spacing: 1px;">
+                                            ({{ row.binary }})
+                                        </div>
+                                    {% else %}
+                                        {% for char in row.encrypted_dot_map %}
+                                            <span class="{% if char == '●' %}dot-1{% else %}dot-0{% endif %}">{{ char }}</span>
+                                        {% endfor %}
+                                        <div class="text-muted small mt-1 fs-6 font-monospace" style="letter-spacing: 1px;">
+                                            ({{ row.encrypted_binary }})
+                                        </div>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="text-danger fw-bold fs-6">N/A</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Collapsible Original Dot Map Verification Section -->
+        {% if encryption_method != 'none' %}
+        <div class="card p-4 mb-4 border-info">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="fw-bold mb-0 text-info">🔍 Verify Normal (Unencrypted) Dot Map</h4>
+                <button class="btn btn-outline-info" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOriginalDotmap" aria-expanded="false" aria-controls="collapseOriginalDotmap">
+                    Toggle Original Dot Map
+                </button>
+            </div>
+
+            <div class="collapse mt-4" id="collapseOriginalDotmap">
+                <p class="text-muted">Use this table to double-check the raw, unencrypted dot maps of your recovery phrase for verification purposes before physical engraving.</p>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped align-middle dotmap-table">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col" style="width: 80px;">#</th>
+                                <th scope="col">Original Word</th>
+                                <th scope="col" class="text-center" style="letter-spacing: 2px;">Normal 12-Bit Dot Map</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in results %}
+                            {% if row.match_found %}
+                            <tr>
+                                <th scope="row">{{ row.num }}</th>
+                                <td><strong>{{ row.original }}</strong></td>
+                                <td class="text-center fs-4 font-monospace">
+                                    {% for char in row.dot_map %}
+                                        <span class="{% if char == '●' %}dot-1{% else %}dot-0{% endif %}">{{ char }}</span>
+                                    {% endfor %}
+                                    <div class="text-muted small mt-1 fs-6 font-monospace" style="letter-spacing: 1px;">
+                                        ({{ row.binary }})
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Safe Bytearray Card -->
+        <div class="card p-4 mb-4">
+            <h3 class="border-bottom pb-2 mb-4 fw-bold text-dark">Safe Bytearray Transformation Output</h3>
+
+            <!-- Raw Words Bytearray -->
+            <div class="mb-4">
+                <h5 class="fw-bold text-secondary">Exact Words Input Bytearray (UTF-8 Encoded)</h5>
+                <p class="text-muted small mb-2">
+                    This represents the raw string representation of the parsed words (joined by a single space) converted to a safe bytearray.
+                </p>
+                <div class="mb-2"><strong>Hex String:</strong></div>
+                <div class="bytearray-box mb-2">{{ raw_words_bytearray_hex if raw_words_bytearray_hex else 'Empty' }}</div>
+                <div><strong>Integer Decimal Array:</strong></div>
+                <div class="bytearray-box">{{ raw_words_bytearray_list if raw_words_bytearray_list else 'Empty' }}</div>
+            </div>
+
+            <!-- Normal vs Encrypted Bytearrays -->
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <h5 class="fw-bold text-secondary">Original Word Indices Bytearray</h5>
+                    <p class="text-muted small mb-2">Matched BIP39 indices serialized to big-endian 2-byte values.</p>
+                    <div class="mb-2"><strong>Hex String:</strong></div>
+                    <div class="bytearray-box mb-2">{{ indices_bytearray_hex if indices_bytearray_hex else 'Empty' }}</div>
+                    <div><strong>Integer Decimal Array:</strong></div>
+                    <div class="bytearray-box">{{ indices_bytearray_list if indices_bytearray_list else 'Empty' }}</div>
+                </div>
+
+                <div class="col-md-6">
+                    <h5 class="fw-bold text-secondary">
+                        {% if encryption_method == 'none' %}
+                            Encrypted Word Indices Bytearray
+                        {% else %}
+                            🔒 Encrypted Word Indices Bytearray
+                        {% endif %}
+                    </h5>
+                    {% if encryption_method == 'none' %}
+                        <p class="text-muted small mb-2">Activate an advanced encryption method to populate this output field.</p>
+                        <div class="text-muted small">Not Active</div>
+                    {% else %}
+                        <p class="text-muted small mb-2">Encrypted matched indices serialized to big-endian 2-byte values.</p>
+                        <div class="mb-2"><strong>Hex String:</strong></div>
+                        <div class="bytearray-box mb-2">{{ encrypted_indices_bytearray_hex if encrypted_indices_bytearray_hex else 'Empty' }}</div>
+                        <div><strong>Integer Decimal Array:</strong></div>
+                        <div class="bytearray-box">{{ encrypted_indices_bytearray_list if encrypted_indices_bytearray_list else 'Empty' }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {% endif %}
+
+        <!-- Pre-Input Security Advice Modal -->
+        <div class="modal fade" id="beforeSecurityModal" tabindex="-1" aria-labelledby="beforeSecurityModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-warning text-dark">
+                        <h5 class="modal-title fw-bold" id="beforeSecurityModalLabel">⚠️ Critical Security Advice Before Introducing Words</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body bg-light">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="p-3 bg-white rounded shadow-sm h-100">
+                                    <h6 class="fw-bold text-dark">1. Run Completely Offline</h6>
+                                    <p class="small text-muted mb-0">Disconnect your computer from the internet (air-gap) or run on a secure offline Live OS like Tails or Ubuntu Live.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="p-3 bg-white rounded shadow-sm h-100">
+                                    <h6 class="fw-bold text-dark">2. Disable Browser Extensions</h6>
+                                    <p class="small text-muted mb-0">Open this app in a <strong>Private / Incognito Window</strong>. Third-party extensions can scrape page inputs and leak secrets.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="p-3 bg-white rounded shadow-sm h-100">
+                                    <h6 class="fw-bold text-dark">3. Type, Do Not Paste</h6>
+                                    <p class="small text-muted mb-0">Type your recovery words manually instead of copy-pasting to prevent clipboard histories or background tools from caching your phrase.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning text-dark fw-bold" data-bs-dismiss="modal">I Understand, Proceed Safely</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Post-Output Security Advice Modal -->
+        <div class="modal fade" id="afterSecurityModal" tabindex="-1" aria-labelledby="afterSecurityModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-info text-white">
+                        <h5 class="modal-title fw-bold" id="afterSecurityModalLabel">🔒 Critical Security Actions After Generating Output</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body bg-light">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <div class="p-3 bg-white rounded shadow-sm h-100">
+                                    <h6 class="fw-bold text-dark">1. Clear Clipboard</h6>
+                                    <p class="small text-muted mb-0">Copy some random dummy text (e.g., "abc") to completely wipe your clipboard history buffer.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="p-3 bg-white rounded shadow-sm h-100">
+                                    <h6 class="fw-bold text-dark">2. Close Windows</h6>
+                                    <p class="small text-muted mb-0">Completely close all browser tabs and clear the temporary browser memory cache.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="p-3 bg-white rounded shadow-sm h-100">
+                                    <h6 class="fw-bold text-dark">3. Kill Server</h6>
+                                    <p class="small text-muted mb-0">Terminate the local Flask backend server process running on your machine immediately.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="p-3 bg-white rounded shadow-sm h-100">
+                                    <h6 class="fw-bold text-dark">4. Restart Device</h6>
+                                    <p class="small text-muted mb-0">Reboot/restart your machine to guarantee that system RAM is completely flushed and cleared.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info text-white fw-bold" data-bs-dismiss="modal">Got It, Secure My Session</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Educational Footer -->
+        <footer class="mt-5 text-center text-muted py-4 border-top">
+            <p class="mb-1"><strong>BIP39 Mnemonic Dotmap Visualizer</strong></p>
+            <p class="small mb-0">Designed as a secure offline system to plot recovery seeds visually on durable mediums like metal plates.</p>
+        </footer>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Show the Pre-Input Security Advice Modal once per browser session
+            if (!sessionStorage.getItem('beforeModalShown')) {
+                var beforeModal = new bootstrap.Modal(document.getElementById('beforeSecurityModal'));
+                beforeModal.show();
+                sessionStorage.setItem('beforeModalShown', 'true');
+            }
+
+            // Show the Post-Output Security Advice Modal automatically when results are displayed
+            {% if results %}
+            var afterModal = new bootstrap.Modal(document.getElementById('afterSecurityModal'));
+            afterModal.show();
+            {% endif %}
+        });
+    </script>
+</body>
+</html>
