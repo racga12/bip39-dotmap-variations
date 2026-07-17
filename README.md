@@ -34,6 +34,48 @@ Instead of storing recovery words in plain text—which is highly vulnerable to 
 * **Highly Customizable:** Designed to be easily engraved or punched onto steel, titanium, or copper plates for fireproof and waterproof backups.
 
 ---
+
+### Interactive Web Application Guide
+
+This repository includes a secure, self-hosted web-based visualization utility. It automates word validation, language mapping, binary dot map visualization, advanced encryption (XOR / Bit Permutation), and hex/decimal bytearray encoding.
+
+#### 🚀 How to Install and Run Locally
+To maintain maximum security, you should run this application in a completely offline environment.
+
+1. **Clone or Download the Repository:**
+   ```bash
+   git clone https://github.com/racga12/bip39-dotmap-variations.git
+   cd bip39-dotmap-variations
+   ```
+2. **Install Dependencies:**
+   Ensure you have **Python 3.12** installed, then install Flask:
+   ```bash
+   pip install Flask
+   ```
+3. **Run the Server:**
+   ```bash
+   python app.py
+   ```
+4. **Access the App:**
+   Open your browser and navigate to: `http://127.0.0.1:5000`
+
+---
+
+#### 🔒 Safe Offline Workflow (Air-Gapped Security)
+Since your recovery seed phrase governs the security of your cryptocurrency assets, **NEVER** type your seed phrase into a computer that is connected to the internet. Follow this safe workflow:
+
+1. **Download the Repository:** Download the repository source code onto a USB flash drive.
+2. **Air-Gapped OS Boot:** Boot a secure offline machine or load an offline Live OS (such as *Tails* or an *Ubuntu Live USB*) with network connections completely disabled (no Wi-Fi, no Ethernet).
+3. **Transfer and Run:** Transfer the project files from your USB drive, start the server using `python app.py`, and open the application.
+4. **Private Incognito Window:** Access the interface in an **Incognito / Private Window** with all browser extensions/add-ons disabled to prevent background tools or keyloggers from scraping page content.
+5. **Secure Input:** Hand-type your words directly into the input area. The application's input sanitization layers will automatically strip null bytes (`\x00`) and limit input lengths to prevent buffer errors.
+6. **Post-Output Cleanup Checklist:** Once your dot map is generated and safely recorded or engraved:
+   - Copy a random dummy string (e.g., "abc") to overwrite your clipboard.
+   - Close all browser tabs and windows.
+   - Terminate the local Flask server process in your terminal (`Ctrl+C`).
+   - Reboot/restart your computer to completely flush the volatile RAM.
+
+---
 ### Advanced Encryption Methods
 
 To achieve maximum security, you can encrypt your binary sequence *before* plotting the dots on the map. This ensures that even if someone finds your physical backup, they cannot decode your seed phrase without knowing the secret key or method.
@@ -59,6 +101,123 @@ Below is a technical comparison of the encryption and obfuscation methods suppor
 | **#3** | **Bit Permutation (P-Boxes)** | ⭐⭐⭐☆☆ | **Medium** | A grid-reordering reference card | Preventing visual pattern recognition of the BIP39 indices. |
 | **#4** | **Circular Shift (Rotation)** | ⭐⭐☆☆☆ | **Very Easy** | Mental math (Shifting columns/rows) | Quick and simple obfuscation that can be calculated in seconds. |
 | **#5** | **Gray Code (Reflected)** | ☆☆☆☆☆ | **Easy** | A binary-to-Gray conversion table | Preventing physical reading errors (Not for encryption). |
+
+---
+
+### 🧠 Theoretical Logic & Manual Offline Encryption/Decryption
+
+To achieve maximum security (so that you do not have to trust any machine or computer), you can compute your encrypted dot maps entirely **by hand using just pen and paper**. Below is the theoretical breakdown and practical guide for performing these operations manually.
+
+---
+
+#### 1. XOR Masking (Vernam Cipher / One-Time Pad)
+
+##### Theoretical Logic
+The **Vernam Cipher** provides mathematical perfect secrecy (unbreakable security) when the key is truly random, at least as long as the data, and never reused.
+
+XOR (Exclusive OR) operates on binary values ($0$ and $1$). Under XOR logic, the output is `1` if and only if the inputs are different:
+* $0 \oplus 0 = 0$
+* $1 \oplus 1 = 0$
+* $0 \oplus 1 = 1$
+* $1 \oplus 0 = 1$
+
+##### Manual Execution (Pen & Paper)
+When plotting onto dot maps, we translate binary to dots: **`○` for 0** (empty) and **`●` for 1** (filled).
+Applying the XOR logical rules directly to dots yields:
+1. **Same Dot State ➔ Empty (`○`):**
+   * `○` XOR `○` = `○`
+   * `●` XOR `●` = `○`
+2. **Different Dot State ➔ Filled (`●`):**
+   * `○` XOR `●` = `●`
+   * `●` XOR `○` = `●`
+
+##### 📝 Step-by-Step Manual XOR Example
+Let's encrypt the word **`amazing`** (BIP39 index **63**) with a secure 12-bit key.
+
+* **Step 1: Convert Word to Binary Dot Map**
+  * Index $63$ in binary is `000000111111` (padded to 12 bits).
+  * Original Dot Map: `○ ○ ○ ○ ○ ○ ● ● ● ● ● ●`
+
+* **Step 2: Write Down the 12-Bit Key/Mask**
+  * Suppose our cryptographically random 12-bit key is `101010101010`.
+  * Key Dot Map: `● ○ ● ○ ● ○ ● ○ ● ○ ● ○`
+
+* **Step 3: Apply XOR Rules Column-by-Column**
+  * Column 1: `○` XOR `●` (Different) ➔ `●`
+  * Column 2: `○` XOR `○` (Same) ➔ `○`
+  * Column 3: `○` XOR `●` (Different) ➔ `●`
+  * Column 4: `○` XOR `○` (Same) ➔ `○`
+  * Column 5: `○` XOR `●` (Different) ➔ `●`
+  * Column 6: `○` XOR `○` (Same) ➔ `○`
+  * Column 7: `●` XOR `●` (Same) ➔ `○`
+  * Column 8: `●` XOR `○` (Different) ➔ `●`
+  * Column 9: `●` XOR `●` (Same) ➔ `○`
+  * Column 10: `●` XOR `○` (Different) ➔ `●`
+  * Column 11: `●` XOR `●` (Same) ➔ `○`
+  * Column 12: `●` XOR `○` (Different) ➔ `●`
+
+* **Final Encrypted Dot Map:**
+  * `● ○ ● ○ ● ○ ○ ● ○ ● ○ ●` (Binary: `101010010101`)
+
+##### Manual Decryption
+To recover your seed phrase by hand, simply XOR your **Encrypted Dot Map** with the **Key Dot Map** using the exact same rules:
+* Encrypted: `● ○ ● ○ ● ○ ○ ● ○ ● ○ ●`
+* XOR Key:  `● ○ ● ○ ● ○ ● ○ ● ○ ● ○`
+* Decrypted: `○ ○ ○ ○ ○ ○ ● ● ● ● ● ●` (Binary: `000000111111` = Index **63** = **`amazing`**)
+
+---
+
+#### 2. Bit Permutation (P-Boxes)
+
+##### Theoretical Logic
+**Bit Permutation** is a transposition cipher that shuffles the position of each bit in a 12-bit sequence. It destroys visual patterns and relationships between adjacent binary columns without modifying the number of filled or empty dots in a row.
+
+##### Manual Execution (Pen & Paper)
+To perform this manually, you need a **1-based Permutation Key** of 12 unique positions (from 1 to 12) written on a reference card.
+
+##### 📝 Step-by-Step Manual Permutation Example
+Let's encrypt the word **`key`** (BIP39 index **977**).
+
+* **Step 1: Write Down Original Binary Dot Map with Positions**
+  * Index $977$ in binary is `011110110001`.
+  * Original Dots:
+    ```
+    Pos:  1   2   3   4   5   6   7   8   9  10  11  12
+    Bit:  0   1   1   1   1   0   1   1   0   0   0   1
+    Dot:  ○   ●   ●   ●   ●   ○   ●   ●   ○   ○   ○   ●
+    ```
+
+* **Step 2: Define your Permutation Card**
+  * Let's use a sample permutation shuffling positions to: `[5, 12, 1, 8, 3, 10, 6, 2, 9, 11, 4, 7]`.
+  * This card dictates:
+    - Position 1 of encrypted row takes bit from original position **5**
+    - Position 2 of encrypted row takes bit from original position **12**
+    - Position 3 of encrypted row takes bit from original position **1**
+    - ...and so on.
+
+* **Step 3: Construct the Encrypted Row**
+  * Encrypted Pos 1 ➔ Original Pos 5 (`1` / `●`)
+  * Encrypted Pos 2 ➔ Original Pos 12 (`1` / `●`)
+  * Encrypted Pos 3 ➔ Original Pos 1 (`0` / `○`)
+  * Encrypted Pos 4 ➔ Original Pos 8 (`1` / `●`)
+  * Encrypted Pos 5 ➔ Original Pos 3 (`1` / `●`)
+  * Encrypted Pos 6 ➔ Original Pos 10 (`0` / `○`)
+  * Encrypted Pos 7 ➔ Original Pos 6 (`0` / `○`)
+  * Encrypted Pos 8 ➔ Original Pos 2 (`1` / `●`)
+  * Encrypted Pos 9 ➔ Original Pos 9 (`0` / `○`)
+  * Encrypted Pos 10 ➔ Original Pos 11 (`0` / `○`)
+  * Encrypted Pos 11 ➔ Original Pos 4 (`1` / `●`)
+  * Encrypted Pos 12 ➔ Original Pos 7 (`1` / `●`)
+
+* **Final Encrypted Dot Map:**
+  * `● ● ○ ● ● ○ ○ ● ○ ○ ● ●` (Binary: `110110010011`)
+
+##### Manual Decryption
+To decrypt, look at your reference card to see where each encrypted bit should go:
+* Encrypted bit at Pos 1 goes back to Pos 5.
+* Encrypted bit at Pos 2 goes back to Pos 12.
+* Encrypted bit at Pos 3 goes back to Pos 1.
+* By doing this simple inverse transposition, you instantly rebuild your original unencrypted dot map `○ ● ● ● ● ○ ● ● ○ ○ ○ ●` (Index **977** = **`key`**).
 
 ---
 
