@@ -2,6 +2,12 @@
 
 ## Work In Progress
 
+
+## Table of Contents
+1. [How It Works](#How-It-Works)
+2. [Getting Started](#getting-started)
+
+
 <table style="border: none; border-collapse: collapse; width: 100%;">
   <tr style="border: none;">
     <td style="border: none; padding: 10px; width: 70%; vertical-align: top;">
@@ -111,8 +117,8 @@ To achieve maximum security (so that you do not have to trust any machine or com
 ---
 
 #### [1. XOR Masking (Vernam Cipher / One-Time Pad)](https://github.com/racga12/bip39-dotmap-variations/wiki/XOR-Masking-(Vernam-Cipher))
-
-#### [2. Bit Permutation (P-Boxes)](https://github.com/racga12/bip39-dotmap-variations/wiki/Bit-Permutation-(P%E2%80%90Boxes))
+#### [2. Decoy Dots (Steganography)](https://github.com/racga12/bip39-dotmap-variations/wiki/Decoy-Dots-(Grid-Steganography))
+#### [3. Bit Permutation (P-Boxes)](https://github.com/racga12/bip39-dotmap-variations/wiki/Bit-Permutation-(P%E2%80%90Boxes))
 
 ---
 
