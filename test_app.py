@@ -107,5 +107,39 @@ class TestBIP39DotmapApp(unittest.TestCase):
         self.assertIn("NOTAWORD", data_str)
         self.assertIn("NOT FOUND", data_str)
 
+    def test_post_xor_encryption(self):
+        # Test XOR Masking Advanced Encryption Method
+        phrase = "abandon ability able about above absent absorb abstract absurd abuse access accident"
+        response = self.client.post('/', data={
+            'language': 'english',
+            'words': phrase,
+            'encryption_method': 'xor'
+        })
+        self.assertEqual(response.status_code, 200)
+        data_str = response.data.decode('utf-8')
+        # Decryption Key guide must be visible
+        self.assertIn("Manual Decryption Keys & Guide", data_str)
+        self.assertIn("XOR Masking active", data_str)
+        self.assertIn("Decryption Key (Vernam)", data_str)
+        # Verify unencrypted dotmap collapsible area is present
+        self.assertIn("Verify Normal (Unencrypted) Dot Map", data_str)
+
+    def test_post_permutation_encryption(self):
+        # Test Bit Permutation Advanced Encryption Method
+        phrase = "abandon ability able about above absent absorb abstract absurd abuse access accident"
+        response = self.client.post('/', data={
+            'language': 'english',
+            'words': phrase,
+            'encryption_method': 'permutation'
+        })
+        self.assertEqual(response.status_code, 200)
+        data_str = response.data.decode('utf-8')
+        # Decryption Key guide must be visible
+        self.assertIn("Manual Decryption Keys & Guide", data_str)
+        self.assertIn("Bit Permutation active", data_str)
+        self.assertIn("COLUMN RE-ORDERING REFERENCE CARD", data_str)
+        # Verify unencrypted dotmap collapsible area is present
+        self.assertIn("Verify Normal (Unencrypted) Dot Map", data_str)
+
 if __name__ == '__main__':
     unittest.main()
