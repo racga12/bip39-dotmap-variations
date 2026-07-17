@@ -94,10 +94,15 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="col-md-6 d-flex align-items-end">
-                        <p class="text-muted small mb-2">
-                            Select the language matching your recovery phrase words. Wordlists are loaded directly from BIP39 reference txt files.
-                        </p>
+
+                    <!-- Advanced Encryption Options -->
+                    <div class="col-md-6">
+                        <label for="encryption_method" class="form-label fw-bold">Advanced Encryption Method</label>
+                        <select name="encryption_method" id="encryption_method" class="form-select form-select-lg">
+                            <option value="none" {% if encryption_method == 'none' %}selected{% endif %}>None (Normal Dot Map)</option>
+                            <option value="xor" {% if encryption_method == 'xor' %}selected{% endif %}>XOR Masking (Vernam Cipher)</option>
+                            <option value="permutation" {% if encryption_method == 'permutation' %}selected{% endif %}>Bit Permutation (P-Boxes)</option>
+                        </select>
                     </div>
 
                     <!-- Word Input -->
@@ -125,10 +130,101 @@
         </div>
         {% endif %}
 
+        <!-- Decryption Key & Manual Decryption Guide Card -->
+        {% if results and encryption_method != 'none' %}
+        <div class="card p-4 mb-4 border-warning" style="border-width: 2px;">
+            <h3 class="border-bottom pb-2 mb-4 fw-bold text-warning">🔑 Manual Decryption Keys & Guide</h3>
+
+            {% if encryption_method == 'xor' %}
+            <p><strong>XOR Masking active:</strong> Each word's unencrypted dot map was XOR'ed with a unique, cryptographically secure 12-bit random key. To manually retrieve your original dot map, calculate the logical XOR of the Encrypted Dot Map and its corresponding key.</p>
+            <div class="alert alert-light border shadow-sm">
+                <h5 class="fw-bold">💡 How to Decrypt Manually:</h5>
+                <p class="mb-1">Compare the encrypted dots with the key dots column by column:</p>
+                <ul class="mb-0">
+                    <li>If both are empty (○○) or both are filled (●●), the decrypted dot is **empty (○)** (0 ^ 0 = 0, 1 ^ 1 = 0).</li>
+                    <li>If they are different (○● or ●○), the decrypted dot is **filled (●)** (0 ^ 1 = 1, 1 ^ 0 = 1).</li>
+                </ul>
+            </div>
+
+            <div class="table-responsive mt-3">
+                <table class="table table-bordered table-striped align-middle dotmap-table">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col" style="width: 80px;">#</th>
+                            <th scope="col">Word</th>
+                            <th scope="col" class="text-center">Decryption Key (Vernam)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in results %}
+                        {% if row.match_found %}
+                        <tr>
+                            <th scope="row">{{ row.num }}</th>
+                            <td><strong>{{ row.original }}</strong></td>
+                            <td class="text-center fs-4 font-monospace text-warning">
+                                {% for char in row.xor_key_dot_map %}
+                                    <span class="{% if char == '●' %}dot-1{% else %}dot-0{% endif %}">{{ char }}</span>
+                                {% endfor %}
+                                <div class="text-muted small mt-1 fs-6 font-monospace" style="letter-spacing: 1px;">
+                                    ({{ row.xor_key_binary }})
+                                </div>
+                            </td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% elif encryption_method == 'permutation' %}
+            <p><strong>Bit Permutation active:</strong> All 12 columns of the dot map have been shuffled according to a cryptographically strong random permutation sequence. This prevents visual pattern recognition of your BIP39 indices.</p>
+
+            <div class="alert alert-light border shadow-sm">
+                <h5 class="fw-bold">💡 How to Decrypt Manually (Counting Right-to-Left):</h5>
+                <p class="mb-0">Note: Column positions are counted from <strong>right to left</strong> (Column 1 is the right-most column, Column 12 is the left-most column). Use the reference mapping card below: for each Original Position index, look up the corresponding Encrypted Position and copy its state (○ or ●) back to the original position.</p>
+            </div>
+
+            <div class="row g-3 justify-content-center">
+                <div class="col-md-8">
+                    <div class="card bg-dark text-white p-3">
+                        <h6 class="fw-bold text-center text-warning mb-3">COLUMN RE-ORDERING REFERENCE CARD (RIGHT TO LEFT)</h6>
+                        <div class="table-responsive">
+                            <table class="table table-dark table-bordered text-center align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-warning">Original Position (R to L)</th>
+                                        {% for m in decryption_mapping %}
+                                        <th>{{ m.original_pos }}</th>
+                                        {% endfor %}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="text-warning">Read From Encrypted Col (R to L)</td>
+                                        {% for m in decryption_mapping %}
+                                        <td class="fw-bold text-info fs-5">{{ m.encrypted_pos }}</td>
+                                        {% endfor %}
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
         <!-- Results Card -->
         {% if results %}
         <div class="card p-4 mb-4">
-            <h3 class="border-bottom pb-2 mb-4 fw-bold text-dark">Visualization & Dot Map Table</h3>
+            <h3 class="border-bottom pb-2 mb-4 fw-bold text-dark">
+                {% if encryption_method == 'none' %}
+                    Visualization & Dot Map Table
+                {% else %}
+                    🔐 Encrypted Visual Dot Map Table
+                {% endif %}
+            </h3>
 
             <div class="table-responsive">
                 <table class="table table-bordered table-striped align-middle dotmap-table">
@@ -137,7 +233,13 @@
                             <th scope="col" style="width: 80px;">#</th>
                             <th scope="col">Original Word</th>
                             <th scope="col">Wordlist Index (1-2048)</th>
-                            <th scope="col" class="text-center" style="letter-spacing: 2px;">12-Bit Dot Map Representation</th>
+                            <th scope="col" class="text-center" style="letter-spacing: 2px;">
+                                {% if encryption_method == 'none' %}
+                                    12-Bit Dot Map Representation
+                                {% else %}
+                                    🔒 Encrypted 12-Bit Dot Map Representation
+                                {% endif %}
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -159,12 +261,21 @@
                             </td>
                             <td class="text-center fs-4 font-monospace">
                                 {% if row.match_found %}
-                                    {% for char in row.dot_map %}
-                                        <span class="{% if char == '●' %}dot-1{% else %}dot-0{% endif %}">{{ char }}</span>
-                                    {% endfor %}
-                                    <div class="text-muted small mt-1 fs-6 font-monospace" style="letter-spacing: 1px;">
-                                        ({{ row.binary }})
-                                    </div>
+                                    {% if encryption_method == 'none' %}
+                                        {% for char in row.dot_map %}
+                                            <span class="{% if char == '●' %}dot-1{% else %}dot-0{% endif %}">{{ char }}</span>
+                                        {% endfor %}
+                                        <div class="text-muted small mt-1 fs-6 font-monospace" style="letter-spacing: 1px;">
+                                            ({{ row.binary }})
+                                        </div>
+                                    {% else %}
+                                        {% for char in row.encrypted_dot_map %}
+                                            <span class="{% if char == '●' %}dot-1{% else %}dot-0{% endif %}">{{ char }}</span>
+                                        {% endfor %}
+                                        <div class="text-muted small mt-1 fs-6 font-monospace" style="letter-spacing: 1px;">
+                                            ({{ row.encrypted_binary }})
+                                        </div>
+                                    {% endif %}
                                 {% else %}
                                     <span class="text-danger fw-bold fs-6">N/A</span>
                                 {% endif %}
@@ -176,12 +287,57 @@
             </div>
         </div>
 
+        <!-- Collapsible Original Dot Map Verification Section -->
+        {% if encryption_method != 'none' %}
+        <div class="card p-4 mb-4 border-info">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="fw-bold mb-0 text-info">🔍 Verify Normal (Unencrypted) Dot Map</h4>
+                <button class="btn btn-outline-info" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOriginalDotmap" aria-expanded="false" aria-controls="collapseOriginalDotmap">
+                    Toggle Original Dot Map
+                </button>
+            </div>
+
+            <div class="collapse mt-4" id="collapseOriginalDotmap">
+                <p class="text-muted">Use this table to double-check the raw, unencrypted dot maps of your recovery phrase for verification purposes before physical engraving.</p>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped align-middle dotmap-table">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col" style="width: 80px;">#</th>
+                                <th scope="col">Original Word</th>
+                                <th scope="col" class="text-center" style="letter-spacing: 2px;">Normal 12-Bit Dot Map</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in results %}
+                            {% if row.match_found %}
+                            <tr>
+                                <th scope="row">{{ row.num }}</th>
+                                <td><strong>{{ row.original }}</strong></td>
+                                <td class="text-center fs-4 font-monospace">
+                                    {% for char in row.dot_map %}
+                                        <span class="{% if char == '●' %}dot-1{% else %}dot-0{% endif %}">{{ char }}</span>
+                                    {% endfor %}
+                                    <div class="text-muted small mt-1 fs-6 font-monospace" style="letter-spacing: 1px;">
+                                        ({{ row.binary }})
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
         <!-- Safe Bytearray Card -->
         <div class="card p-4 mb-4">
             <h3 class="border-bottom pb-2 mb-4 fw-bold text-dark">Safe Bytearray Transformation Output</h3>
 
             <!-- Raw Words Bytearray -->
-            <div class="mb-2">
+            <div class="mb-4">
                 <h5 class="fw-bold text-secondary">Exact Words Input Bytearray (UTF-8 Encoded)</h5>
                 <p class="text-muted small mb-2">
                     This represents the raw string representation of the parsed words (joined by a single space) converted to a safe bytearray.
@@ -190,6 +346,38 @@
                 <div class="bytearray-box mb-2">{{ raw_words_bytearray_hex if raw_words_bytearray_hex else 'Empty' }}</div>
                 <div><strong>Integer Decimal Array:</strong></div>
                 <div class="bytearray-box">{{ raw_words_bytearray_list if raw_words_bytearray_list else 'Empty' }}</div>
+            </div>
+
+            <!-- Normal vs Encrypted Bytearrays -->
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <h5 class="fw-bold text-secondary">Original Word Indices Bytearray</h5>
+                    <p class="text-muted small mb-2">Matched BIP39 indices serialized to big-endian 2-byte values.</p>
+                    <div class="mb-2"><strong>Hex String:</strong></div>
+                    <div class="bytearray-box mb-2">{{ indices_bytearray_hex if indices_bytearray_hex else 'Empty' }}</div>
+                    <div><strong>Integer Decimal Array:</strong></div>
+                    <div class="bytearray-box">{{ indices_bytearray_list if indices_bytearray_list else 'Empty' }}</div>
+                </div>
+
+                <div class="col-md-6">
+                    <h5 class="fw-bold text-secondary">
+                        {% if encryption_method == 'none' %}
+                            Encrypted Word Indices Bytearray
+                        {% else %}
+                            🔒 Encrypted Word Indices Bytearray
+                        {% endif %}
+                    </h5>
+                    {% if encryption_method == 'none' %}
+                        <p class="text-muted small mb-2">Activate an advanced encryption method to populate this output field.</p>
+                        <div class="text-muted small">Not Active</div>
+                    {% else %}
+                        <p class="text-muted small mb-2">Encrypted matched indices serialized to big-endian 2-byte values.</p>
+                        <div class="mb-2"><strong>Hex String:</strong></div>
+                        <div class="bytearray-box mb-2">{{ encrypted_indices_bytearray_hex if encrypted_indices_bytearray_hex else 'Empty' }}</div>
+                        <div><strong>Integer Decimal Array:</strong></div>
+                        <div class="bytearray-box">{{ encrypted_indices_bytearray_list if encrypted_indices_bytearray_list else 'Empty' }}</div>
+                    {% endif %}
+                </div>
             </div>
         </div>
 

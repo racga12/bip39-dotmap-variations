@@ -107,5 +107,63 @@ class TestBIP39DotmapApp(unittest.TestCase):
         self.assertIn("NOTAWORD", data_str)
         self.assertIn("NOT FOUND", data_str)
 
+    def test_post_xor_encryption(self):
+        # Test XOR Masking Advanced Encryption Method
+        phrase = "abandon ability able about above absent absorb abstract absurd abuse access accident"
+        response = self.client.post('/', data={
+            'language': 'english',
+            'words': phrase,
+            'encryption_method': 'xor'
+        })
+        self.assertEqual(response.status_code, 200)
+        data_str = response.data.decode('utf-8')
+        # Decryption Key guide must be visible
+        self.assertIn("Manual Decryption Keys & Guide", data_str)
+        self.assertIn("XOR Masking active", data_str)
+        self.assertIn("Decryption Key (Vernam)", data_str)
+        # Verify unencrypted dotmap collapsible area is present
+        self.assertIn("Verify Normal (Unencrypted) Dot Map", data_str)
+
+    def test_post_permutation_encryption(self):
+        # Test Bit Permutation Advanced Encryption Method
+        phrase = "abandon ability able about above absent absorb abstract absurd abuse access accident"
+        response = self.client.post('/', data={
+            'language': 'english',
+            'words': phrase,
+            'encryption_method': 'permutation'
+        })
+        self.assertEqual(response.status_code, 200)
+        data_str = response.data.decode('utf-8')
+        # Decryption Key guide must be visible
+        self.assertIn("Manual Decryption Keys & Guide", data_str)
+        self.assertIn("Bit Permutation active", data_str)
+        self.assertIn("COLUMN RE-ORDERING REFERENCE CARD (RIGHT TO LEFT)", data_str)
+        # Verify unencrypted dotmap collapsible area is present
+        self.assertIn("Verify Normal (Unencrypted) Dot Map", data_str)
+
+    def test_permutation_rtl_mapping_calculation(self):
+        # Explicitly test right-to-left mapping calculation logic
+        # perm corresponds to list(range(12)) but reversed
+        perm = [11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+        decryption_mapping = []
+        for k in range(1, 13):
+            orig_idx = 12 - k
+            j = perm.index(orig_idx)
+            encrypted_pos = 12 - j
+            decryption_mapping.append({
+                'original_pos': k,
+                'encrypted_pos': encrypted_pos
+            })
+
+        # Original position 1 (orig_idx 11) should find j = 0 -> encrypted_pos = 12
+        self.assertEqual(decryption_mapping[0]['original_pos'], 1)
+        self.assertEqual(decryption_mapping[0]['encrypted_pos'], 12)
+        # Original position 2 (orig_idx 10) should find j = 1 -> encrypted_pos = 11
+        self.assertEqual(decryption_mapping[1]['original_pos'], 2)
+        self.assertEqual(decryption_mapping[1]['encrypted_pos'], 11)
+        # Original position 12 (orig_idx 0) should find j = 11 -> encrypted_pos = 1
+        self.assertEqual(decryption_mapping[11]['original_pos'], 12)
+        self.assertEqual(decryption_mapping[11]['encrypted_pos'], 1)
+
 if __name__ == '__main__':
     unittest.main()

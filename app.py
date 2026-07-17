@@ -65,8 +65,14 @@ def safe_to_bytearray(input_str: str) -> bytearray:
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    import secrets
+
     selected_language = request.form.get('language', 'english')
     words_input = request.form.get('words', '')
+    encryption_method = request.form.get('encryption_method', 'none')
+
+    if encryption_method not in ['none', 'xor', 'permutation']:
+        encryption_method = 'none'
 
     # Prevent extremely long inputs or invalid formats
     if len(words_input) > MAX_INPUT_LENGTH:
@@ -94,6 +100,27 @@ def index():
 
     wordlist = WORDLISTS.get(selected_language, [])
 
+    # Handle key generation and permutation
+    permutation_key = None
+    decryption_mapping = None
+
+    if request.method == 'POST' and wordlist and not error_msg:
+        if encryption_method == 'permutation':
+            perm = list(range(12))
+            secrets.SystemRandom().shuffle(perm)
+            permutation_key = perm
+            # Create a 1-based decryption mapping for manual decryption:
+            # "To find original bit at position K (right to left), look at encrypted position Y (right to left)"
+            decryption_mapping = []
+            for k in range(1, 13):
+                orig_idx = 12 - k
+                j = perm.index(orig_idx)
+                encrypted_pos = 12 - j
+                decryption_mapping.append({
+                    'original_pos': k,
+                    'encrypted_pos': encrypted_pos
+                })
+
     # Handle the matching and validation if input is provided
     if request.method == 'POST':
         word_count = len(raw_words)
@@ -115,6 +142,12 @@ def index():
                 dot_map = None
                 match_found = False
 
+                # Encryption-specific variables
+                encrypted_binary = ""
+                encrypted_dot_map = ""
+                xor_key_binary = ""
+                xor_key_dot_map = ""
+
                 # Check match in wordlist
                 if normalized_word in wordlist:
                     # BIP39 indexes are 1-based (1 to 2048)
@@ -125,6 +158,24 @@ def index():
                     # Convert binary string to dots: ○ for 0, ● for 1
                     dot_map = "".join('●' if char == '1' else '○' for char in binary_str)
                     word_indices_list.append(match_index)
+
+                    # Now apply chosen encryption method
+                    if encryption_method == 'xor':
+                        # Generate unique 12-bit key for this word
+                        key_val = secrets.randbits(12)
+                        xor_key_binary = bin(key_val)[2:].zfill(12)
+                        xor_key_dot_map = "".join('●' if char == '1' else '○' for char in xor_key_binary)
+
+                        encrypted_val = match_index ^ key_val
+                        encrypted_binary = bin(encrypted_val)[2:].zfill(12)
+                        encrypted_dot_map = "".join('●' if char == '1' else '○' for char in encrypted_binary)
+                    elif encryption_method == 'permutation':
+                        # Apply the generated permutation to binary_str
+                        encrypted_binary = "".join(binary_str[permutation_key[j]] for j in range(12))
+                        encrypted_dot_map = "".join('●' if char == '1' else '○' for char in encrypted_binary)
+                    else:
+                        encrypted_binary = binary_str
+                        encrypted_dot_map = dot_map
                 else:
                     unmatched_words.append(word)
                     word_indices_list.append(None)
@@ -136,7 +187,11 @@ def index():
                     'match_found': match_found,
                     'index': match_index if match_found else "NOT MATCHED / INVALID",
                     'binary': binary_str if match_found else "",
-                    'dot_map': dot_map if match_found else ""
+                    'dot_map': dot_map if match_found else "",
+                    'encrypted_binary': encrypted_binary if match_found else "",
+                    'encrypted_dot_map': encrypted_dot_map if match_found else "",
+                    'xor_key_binary': xor_key_binary if match_found else "",
+                    'xor_key_dot_map': xor_key_dot_map if match_found else ""
                 })
 
             if unmatched_words:
@@ -150,11 +205,30 @@ def index():
     indices_bytearray_hex = indices_bytearray.hex()
     indices_bytearray_list = list(indices_bytearray)
 
+    # 3. Calculate encrypted indices and bytearray if encryption is active
+    encrypted_word_indices_list = []
+    for row in results:
+        if row['match_found'] and encryption_method != 'none':
+            encrypted_idx = int(row['encrypted_binary'], 2)
+            encrypted_word_indices_list.append(encrypted_idx)
+        else:
+            encrypted_word_indices_list.append(None)
+
+    encrypted_indices_bytearray = bytearray()
+    for idx in encrypted_word_indices_list:
+        if idx is not None:
+            encrypted_indices_bytearray.extend(idx.to_bytes(2, byteorder='big'))
+    encrypted_indices_bytearray_hex = encrypted_indices_bytearray.hex()
+    encrypted_indices_bytearray_list = list(encrypted_indices_bytearray)
+
     return render_template(
         'index.html',
         languages=LANGUAGES,
         selected_language=selected_language,
         words_input=words_input,
+        encryption_method=encryption_method,
+        permutation_key=permutation_key,
+        decryption_mapping=decryption_mapping,
         results=results,
         error_msg=error_msg,
         word_count=len(raw_words),
@@ -162,7 +236,10 @@ def index():
         raw_words_bytearray_list=raw_words_bytearray_list,
         indices_bytearray_hex=indices_bytearray_hex,
         indices_bytearray_list=indices_bytearray_list,
-        word_indices_list=[(idx if idx is not None else "??") for idx in word_indices_list]
+        encrypted_indices_bytearray_hex=encrypted_indices_bytearray_hex,
+        encrypted_indices_bytearray_list=encrypted_indices_bytearray_list,
+        word_indices_list=[(idx if idx is not None else "??") for idx in word_indices_list],
+        encrypted_word_indices_list=[(idx if idx is not None else "??") for idx in encrypted_word_indices_list]
     )
 
 if __name__ == '__main__':
