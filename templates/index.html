@@ -180,19 +180,19 @@
             <p><strong>Bit Permutation active:</strong> All 12 columns of the dot map have been shuffled according to a cryptographically strong random permutation sequence. This prevents visual pattern recognition of your BIP39 indices.</p>
 
             <div class="alert alert-light border shadow-sm">
-                <h5 class="fw-bold">💡 How to Decrypt Manually:</h5>
-                <p class="mb-0">Use the following reference mapping card to re-order the columns. For each index, find the corresponding column number of the encrypted dot map and copy its state (○ or ●) back to the original index position.</p>
+                <h5 class="fw-bold">💡 How to Decrypt Manually (Counting Right-to-Left):</h5>
+                <p class="mb-0">Note: Column positions are counted from <strong>right to left</strong> (Column 1 is the right-most column, Column 12 is the left-most column). Use the reference mapping card below: for each Original Position index, look up the corresponding Encrypted Position and copy its state (○ or ●) back to the original position.</p>
             </div>
 
             <div class="row g-3 justify-content-center">
                 <div class="col-md-8">
                     <div class="card bg-dark text-white p-3">
-                        <h6 class="fw-bold text-center text-warning mb-3">COLUMN RE-ORDERING REFERENCE CARD</h6>
+                        <h6 class="fw-bold text-center text-warning mb-3">COLUMN RE-ORDERING REFERENCE CARD (RIGHT TO LEFT)</h6>
                         <div class="table-responsive">
                             <table class="table table-dark table-bordered text-center align-middle mb-0">
                                 <thead>
                                     <tr>
-                                        <th class="text-warning">Original Position</th>
+                                        <th class="text-warning">Original Position (R to L)</th>
                                         {% for m in decryption_mapping %}
                                         <th>{{ m.original_pos }}</th>
                                         {% endfor %}
@@ -200,7 +200,7 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td class="text-warning">Read From Encrypted Col</td>
+                                        <td class="text-warning">Read From Encrypted Col (R to L)</td>
                                         {% for m in decryption_mapping %}
                                         <td class="fw-bold text-info fs-5">{{ m.encrypted_pos }}</td>
                                         {% endfor %}
