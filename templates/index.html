@@ -51,6 +51,14 @@
         .unmatched-row {
             background-color: #f8d7da !important;
         }
+        .security-banner {
+            border-left: 5px solid #ffc107;
+            background-color: #fffbeb;
+        }
+        .post-security-banner {
+            border-left: 5px solid #0dcaf0;
+            background-color: #f0faff;
+        }
     </style>
 </head>
 <body>
@@ -59,6 +67,31 @@
         <div class="header-section text-center">
             <h1 class="display-5 fw-bold">BIP39 Mnemonic Dotmap</h1>
             <p class="lead mb-0">Transform 12 to 24 recovery words into safe bytearrays and interactive binary dot maps</p>
+        </div>
+
+        <!-- Pre-Input Security Warning -->
+        <div class="card p-4 mb-4 security-banner">
+            <h4 class="text-warning-emphasis fw-bold mb-3">⚠️ Critical Security Advice Before Introducing Words</h4>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="p-3 bg-white rounded shadow-sm h-100">
+                        <h6 class="fw-bold text-dark">1. Run Completely Offline</h6>
+                        <p class="small text-muted mb-0">Disconnect your computer from the internet (air-gap) or run on a secure offline Live OS like Tails or Ubuntu Live.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3 bg-white rounded shadow-sm h-100">
+                        <h6 class="fw-bold text-dark">2. Disable Browser Extensions</h6>
+                        <p class="small text-muted mb-0">Open this app in a <strong>Private / Incognito Window</strong>. Third-party extensions can scrape page inputs and leak secrets.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3 bg-white rounded shadow-sm h-100">
+                        <h6 class="fw-bold text-dark">3. Type, Do Not Paste</h6>
+                        <p class="small text-muted mb-0">Type your recovery words manually instead of copy-pasting to prevent clipboard histories or background tools from caching your phrase.</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Form Card -->
@@ -86,8 +119,8 @@
                     <div class="col-12 mt-4">
                         <label for="words" class="form-label fw-bold">Enter Mnemonic Words (12 to 24 words)</label>
                         <textarea class="form-control" name="words" id="words" rows="5" placeholder="Enter your 12 to 24 words separated by spaces, commas, or newlines..." required>{{ words_input }}</textarea>
-                        <div class="form-text">
-                            Strict input filtering is active to prevent any potential buffer issues or core dumps. Max input length: 10,000 characters. Null bytes are stripped automatically.
+                        <div class="form-text text-danger">
+                            🔒 <strong>Privacy Check:</strong> Input sanitization is active. Safe bytearray processing limits inputs to 10,000 characters and strips null bytes automatically to prevent exploit vectors or core dumps.
                         </div>
                     </div>
 
@@ -159,7 +192,7 @@
         </div>
 
         <!-- Safe Bytearray Card -->
-        <div class="card p-4">
+        <div class="card p-4 mb-4">
             <h3 class="border-bottom pb-2 mb-4 fw-bold text-dark">Safe Bytearray Transformation Output</h3>
 
             <!-- Raw Words Bytearray -->
@@ -186,6 +219,37 @@
                 <div class="bytearray-box mb-2">{{ indices_bytearray_hex if indices_bytearray_hex else 'Empty' }}</div>
                 <div><strong>Integer Decimal Array:</strong></div>
                 <div class="bytearray-box">{{ indices_bytearray_list if indices_bytearray_list else 'Empty' }}</div>
+            </div>
+        </div>
+
+        <!-- Post-Output Security Advice -->
+        <div class="card p-4 mb-4 post-security-banner">
+            <h4 class="text-info-emphasis fw-bold mb-3">🔒 Critical Security Actions After Generating Output</h4>
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <div class="p-3 bg-white rounded shadow-sm h-100">
+                        <h6 class="fw-bold text-dark">1. Clear Clipboard</h6>
+                        <p class="small text-muted mb-0">Copy some random dummy text (e.g., "abc") to completely wipe your clipboard history buffer.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-3 bg-white rounded shadow-sm h-100">
+                        <h6 class="fw-bold text-dark">2. Close Windows</h6>
+                        <p class="small text-muted mb-0">Completely close all browser tabs and clear the temporary browser memory cache.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-3 bg-white rounded shadow-sm h-100">
+                        <h6 class="fw-bold text-dark">3. Kill Server</h6>
+                        <p class="small text-muted mb-0">Terminate the local Flask backend server process running on your machine immediately.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-3 bg-white rounded shadow-sm h-100">
+                        <h6 class="fw-bold text-dark">4. Restart Device</h6>
+                        <p class="small text-muted mb-0">Reboot/restart your machine to guarantee that system RAM is completely flushed and cleared.</p>
+                    </div>
+                </div>
             </div>
         </div>
         {% endif %}

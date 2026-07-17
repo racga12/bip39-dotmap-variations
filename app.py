@@ -5,7 +5,11 @@ from flask import Flask, render_template, request, jsonify
 app = Flask(__name__)
 
 # Constants
-WORDLISTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'wordslists')
+# Support both 'wordlists' and 'wordslists' directories to be robust
+WORDLISTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'wordlists')
+if not os.path.exists(WORDLISTS_DIR):
+    WORDLISTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'wordslists')
+
 MAX_INPUT_LENGTH = 10000  # Prevent denial of service or overflow in rendering/handling
 
 # Load wordlists
