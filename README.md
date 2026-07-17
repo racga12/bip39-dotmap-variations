@@ -88,7 +88,7 @@ Below is a technical comparison of the encryption and obfuscation methods suppor
 | :--- | :--- | :---: | :---: | :--- |
 | **[XOR Masking (Vernam)](https://github.com/racga12/bip39-dotmap-variations/wiki/XOR-Masking-(Vernam-Cipher))** | Unbreakable, easy to compute by hand. | ⭐⭐⭐⭐⭐ | Easy | Maximum mathematical security with simple physical recovery. |
 | **Shamir's Secret Sharing** | Eliminates single points of physical failure. | ⭐⭐⭐⭐⭐ | Complex | Multi-location backups to protect against theft, fire, or loss. |
-| **Decoy Dots (Steganography)** | Hides the backup in plain sight. | ⭐⭐⭐⭐☆ | Easy | Confusing physical intruders by burying real data in visual noise. |
+| **[Decoy Dots (Steganography)](https://github.com/racga12/bip39-dotmap-variations/wiki/Decoy-Dots-(Grid-Steganography))** | Hides the backup in plain sight. | ⭐⭐⭐⭐☆ | Easy | Confusing physical intruders by burying real data in visual noise. |
 | **Matrix Mult. over $GF(2)$** | High mathematical diffusion of data. | ⭐⭐⭐⭐☆ | Difficult | Scrambling visual patterns completely so no two words look alike. |
 | **Salted Hashing (Truncated)** | One-way protection against physical theft. | ⭐⭐⭐⭐☆ | Impossible | High-security backups where recovery is strictly software-assisted. |
 
@@ -97,7 +97,7 @@ Below is a technical comparison of the encryption and obfuscation methods suppor
 | Method | Security | Manual Recovery | Recovery Tool Needed | Best Used For |
 | :--- | :---: | :---: | :--- | :--- |
 | **[XOR Masking (Vernam)](https://github.com/racga12/bip39-dotmap-variations/wiki/XOR-Masking-(Vernam-Cipher))** | ⭐⭐⭐⭐⭐ | **Easy** | Pen and paper (Logical XOR rules) | Unbreakable mathematical security with instant manual decryption. |
-| **Decoy Dots (Steganography)** | ⭐⭐⭐⭐☆ | **Very Easy** | A physical cutout template (Overlay) | Hiding the backup in plain sight; zero math required to decrypt. |
+| **[Decoy Dots (Steganography)](https://github.com/racga12/bip39-dotmap-variations/wiki/Decoy-Dots-(Grid-Steganography))** | ⭐⭐⭐⭐☆ | **Very Easy** | A physical cutout template (Overlay) | Hiding the backup in plain sight; zero math required to decrypt. |
 | **[Bit Permutation (P-Boxes)](https://github.com/racga12/bip39-dotmap-variations/wiki/Bit-Permutation-(P%E2%80%90Boxes))** | ⭐⭐⭐☆☆ | **Medium** | A grid-reordering reference card | Preventing visual pattern recognition of the BIP39 indices. |
 | **Circular Shift (Rotation)** | ⭐⭐☆☆☆ | **Very Easy** | Mental math (Shifting columns/rows) | Quick and simple obfuscation that can be calculated in seconds. |
 | **Gray Code (Reflected)** | ☆☆☆☆☆ | **Easy** | A binary-to-Gray conversion table | Preventing physical reading errors (Not for encryption). |
