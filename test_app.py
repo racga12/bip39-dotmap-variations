@@ -137,31 +137,31 @@ class TestBIP39DotmapApp(unittest.TestCase):
         # Decryption Key guide must be visible
         self.assertIn("Manual Decryption Keys & Guide", data_str)
         self.assertIn("Bit Permutation active", data_str)
-        self.assertIn("COLUMN RE-ORDERING REFERENCE CARD (RIGHT TO LEFT)", data_str)
+        self.assertIn("COLUMN RE-ORDERING REFERENCE CARD", data_str)
         # Verify unencrypted dotmap collapsible area is present
         self.assertIn("Verify Normal (Unencrypted) Dot Map", data_str)
 
-    def test_permutation_rtl_mapping_calculation(self):
-        # Explicitly test right-to-left mapping calculation logic
+    def test_permutation_ltr_mapping_calculation(self):
+        # Explicitly test left-to-right mapping calculation logic
         # perm corresponds to list(range(12)) but reversed
         perm = [11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
         decryption_mapping = []
         for k in range(1, 13):
-            orig_idx = 12 - k
+            orig_idx = k - 1
             j = perm.index(orig_idx)
-            encrypted_pos = 12 - j
+            encrypted_pos = j + 1
             decryption_mapping.append({
                 'original_pos': k,
                 'encrypted_pos': encrypted_pos
             })
 
-        # Original position 1 (orig_idx 11) should find j = 0 -> encrypted_pos = 12
+        # Original position 1 (orig_idx 0) should find j = 11 -> encrypted_pos = 12
         self.assertEqual(decryption_mapping[0]['original_pos'], 1)
         self.assertEqual(decryption_mapping[0]['encrypted_pos'], 12)
-        # Original position 2 (orig_idx 10) should find j = 1 -> encrypted_pos = 11
+        # Original position 2 (orig_idx 1) should find j = 10 -> encrypted_pos = 11
         self.assertEqual(decryption_mapping[1]['original_pos'], 2)
         self.assertEqual(decryption_mapping[1]['encrypted_pos'], 11)
-        # Original position 12 (orig_idx 0) should find j = 11 -> encrypted_pos = 1
+        # Original position 12 (orig_idx 11) should find j = 0 -> encrypted_pos = 1
         self.assertEqual(decryption_mapping[11]['original_pos'], 12)
         self.assertEqual(decryption_mapping[11]['encrypted_pos'], 1)
 

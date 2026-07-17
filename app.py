@@ -110,12 +110,12 @@ def index():
             secrets.SystemRandom().shuffle(perm)
             permutation_key = perm
             # Create a 1-based decryption mapping for manual decryption:
-            # "To find original bit at position K (right to left), look at encrypted position Y (right to left)"
+            # "To find original bit at position K, look at encrypted position Y"
             decryption_mapping = []
             for k in range(1, 13):
-                orig_idx = 12 - k
+                orig_idx = k - 1
                 j = perm.index(orig_idx)
-                encrypted_pos = 12 - j
+                encrypted_pos = j + 1
                 decryption_mapping.append({
                     'original_pos': k,
                     'encrypted_pos': encrypted_pos
