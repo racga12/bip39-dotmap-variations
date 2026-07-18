@@ -56,8 +56,8 @@ To maintain maximum security, you should run this application in a completely of
 
 1. **Clone or Download the Repository:**
    ```bash
-   git clone https://github.com/racga12/bip39-dotmap-variations.git
-   cd bip39-dotmap-variations
+   git clone https://github.com/racga12/bip39-dotmap-encryptor-visualizer.git
+   cd bip39-dotmap-encryptor-visualizer
    ```
 2. **Install Dependencies:**
    Ensure you have **Python 3.12** installed, then install Flask:
