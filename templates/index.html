@@ -121,7 +121,7 @@
                 ⚠️ View Pre-Input Security Advice
             </button>
             <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#afterSecurityModal">
-                🔒 View Post-Output Checklist
+                🔒 View Post-Output Checklist Advice
             </button>
         </div>
 
@@ -143,7 +143,7 @@
 
                     <!-- Advanced Encryption Options -->
                     <div class="col-md-6">
-                        <label for="encryption_method" class="form-label fw-bold">Advanced Encryption Method</label>
+                        <label for="encryption_method" class="form-label fw-bold">Additional Encryption Method</label>
                         <select name="encryption_method" id="encryption_method" class="form-select form-select-lg">
                             <option value="none" {% if encryption_method == 'none' %}selected{% endif %}>None (Normal Dot Map)</option>
                             <option value="xor" {% if encryption_method == 'xor' %}selected{% endif %}>XOR Masking (Vernam Cipher)</option>
@@ -460,7 +460,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-warning text-dark fw-bold" data-bs-dismiss="modal">I Understand, Proceed Safely</button>
+                        <p class="small text-muted mb-0">Please follow these advices and use it at your own risk.</p>
+                        <button type="button" class="btn btn-warning text-dark fw-bold" data-bs-dismiss="modal">I Understand</button>
                     </div>
                 </div>
             </div>
@@ -503,7 +504,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-info text-white fw-bold" data-bs-dismiss="modal">Got It, Secure My Session</button>
+                        <button type="button" class="btn btn-info text-white fw-bold" data-bs-dismiss="modal">Got It</button>
                     </div>
                 </div>
             </div>
@@ -512,7 +513,7 @@
         <!-- Educational Footer -->
         <footer class="mt-5 text-center text-muted py-4 border-top">
             <p class="mb-1"><strong>BIP39 Mnemonic Dotmap Visualizer</strong></p>
-            <p class="small mb-0">Designed as a secure offline system to plot recovery seeds visually on durable mediums like metal plates.</p>
+            <p class="small mb-0">Designed as a secure offline system to plot recovery seeds visually on durable mediums like metal plates. By Racga12</p>
         </footer>
     </div>
 
