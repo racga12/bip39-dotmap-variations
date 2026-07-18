@@ -6,11 +6,11 @@
 ## Table of Contents
 1. [How It Works](#how-it-works)
 2. [Features & Customization](#features--customization)
-3. [Interactive Web Application Guide](#Interactive-Web-Application-Guide)
-4. [Overview of Additional Encryption Methods](#Overview-of-Additional-Encryption-Methods)
-5. [Theoretical Logic & Manual Offline Encryption/Decryption](#-theoretical-logic--manual-offline-encryptiondecryption)
+3. [Interactive Web Application Guide](#%EF%B8%8F-interactive-web-application-guide)
+4. [Theoretical Logic & Manual Offline Encryption/Decryption](#-theoretical-logic--manual-offline-encryptiondecryption)
+5. [Overview of Additional Encryption Methods](#overview-of-additional-encryption-methods)
 6. [BIP 39 wordlists](#bip-39-wordlists-from-bips-repo-by-bitcoin)
-7. [Normal Method](#Normal-method)
+7. [Normal Method](#normal-method)
 
 <table style="border: none; border-collapse: collapse; width: 100%;">
   <tr style="border: none;">
@@ -45,7 +45,7 @@ Instead of storing recovery words in plain text—which is highly vulnerable to 
 
 ---
 
-### Interactive Web Application Guide
+### 🖥️ Interactive Web Application Guide
 
 This repository includes a secure, self-hosted web-based visualization utility. It automates word validation, language mapping, binary dot map visualization, advanced encryption (XOR / Bit Permutation), and hex/decimal bytearray encoding.
 
@@ -79,6 +79,17 @@ Since your recovery seed phrase governs the security of your cryptocurrency asse
 [Recommended Workflow](https://github.com/racga12/bip39-dotmap-variations/wiki/BIP39-Mnemonic-Dotmap-Visualizer-Documentation#recommended-air-gapped-physical-workflow)
 
 ---
+
+### 🧠 Theoretical Logic & Manual Offline Encryption/Decryption
+
+To achieve maximum security (so that you do not have to trust any machine or computer), you can compute your encrypted dot maps entirely **by hand using just pen and paper**. Below is the theoretical breakdown and practical guide for performing these operations manually.
+
+#### [1. XOR Masking (Vernam Cipher / One-Time Pad)](https://github.com/racga12/bip39-dotmap-variations/wiki/XOR-Masking-(Vernam-Cipher))
+#### [2. Decoy Dots (Steganography)](https://github.com/racga12/bip39-dotmap-variations/wiki/Decoy-Dots-(Grid-Steganography))
+#### [3. Bit Permutation (P-Boxes)](https://github.com/racga12/bip39-dotmap-variations/wiki/Bit-Permutation-(P%E2%80%90Boxes))
+
+---
+
 ### Overview of Additional Encryption Methods
 
 To achieve maximum security, you can encrypt your binary sequence *before* plotting the dots on the map. This ensures that even if someone finds your physical backup, they cannot decode your seed phrase without knowing the secret key or method.
@@ -104,18 +115,6 @@ Below is a technical comparison of the encryption and obfuscation methods suppor
 | **[Bit Permutation (P-Boxes)](https://github.com/racga12/bip39-dotmap-variations/wiki/Bit-Permutation-(P%E2%80%90Boxes))** | ⭐⭐⭐☆☆ | **Medium** | A grid-reordering reference card | Preventing visual pattern recognition of the BIP39 indices. |
 | **Circular Shift (Rotation)** | ⭐⭐☆☆☆ | **Very Easy** | Mental math (Shifting columns/rows) | Quick and simple obfuscation that can be calculated in seconds. |
 | **Gray Code (Reflected)** | ☆☆☆☆☆ | **Easy** | A binary-to-Gray conversion table | Preventing physical reading errors (Not for encryption). |
-
----
-
-### 🧠 Theoretical Logic & Manual Offline Encryption/Decryption
-
-To achieve maximum security (so that you do not have to trust any machine or computer), you can compute your encrypted dot maps entirely **by hand using just pen and paper**. Below is the theoretical breakdown and practical guide for performing these operations manually.
-
----
-
-#### [1. XOR Masking (Vernam Cipher / One-Time Pad)](https://github.com/racga12/bip39-dotmap-variations/wiki/XOR-Masking-(Vernam-Cipher))
-#### [2. Decoy Dots (Steganography)](https://github.com/racga12/bip39-dotmap-variations/wiki/Decoy-Dots-(Grid-Steganography))
-#### [3. Bit Permutation (P-Boxes)](https://github.com/racga12/bip39-dotmap-variations/wiki/Bit-Permutation-(P%E2%80%90Boxes))
 
 ---
 
