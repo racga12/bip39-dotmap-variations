@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BIP39 Mnemonic Dotmap Visualizer</title>
+    <!-- Theme Switcher Inline Script (prevents flashing) -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-bs-theme', savedTheme);
+        })();
+    </script>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -11,6 +18,10 @@
             background-color: #f8f9fa;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #333;
+        }
+        [data-bs-theme="dark"] body {
+            background-color: #121212;
+            color: #f8f9fa;
         }
         .container {
             max-width: 960px;
@@ -39,6 +50,12 @@
             color: #0d6efd; /* Blue/Active */
             font-weight: bold;
         }
+        [data-bs-theme="dark"] .dot-0 {
+            color: #495057;
+        }
+        [data-bs-theme="dark"] .dot-1 {
+            color: #3b82f6;
+        }
         .bytearray-box {
             background-color: #212529;
             color: #f8f9fa;
@@ -48,8 +65,21 @@
             word-wrap: break-word;
             white-space: pre-wrap;
         }
+        [data-bs-theme="dark"] .bytearray-box {
+            background-color: #1a1d20;
+            border: 1px solid #343a40;
+        }
         .unmatched-row {
             background-color: #f8d7da !important;
+        }
+        [data-bs-theme="dark"] .unmatched-row {
+            background-color: #411417 !important;
+            color: #f8d7da !important;
+        }
+        [data-bs-theme="dark"] .table-light {
+            --bs-table-color: #f8f9fa;
+            --bs-table-bg: #212529;
+            --bs-table-border-color: #373b3e;
         }
         .security-banner {
             border-left: 5px solid #ffc107;
@@ -59,10 +89,26 @@
             border-left: 5px solid #0dcaf0;
             background-color: #f0faff;
         }
+        [data-bs-theme="dark"] .security-banner {
+            background-color: #221c0e;
+            color: #ffe69c;
+        }
+        [data-bs-theme="dark"] .post-security-banner {
+            background-color: #0e1e24;
+            color: #9eeaf9;
+        }
     </style>
 </head>
 <body>
-    <div class="container py-5">
+    <div class="container py-5 position-relative">
+        <!-- Theme Toggle Button Group in Top-Right Corner -->
+        <div class="position-absolute top-0 end-0 mt-3 me-3 z-3">
+            <div class="btn-group btn-group-sm" role="group" aria-label="Theme switcher">
+                <button type="button" class="btn btn-outline-secondary" id="theme-btn-light">Light</button>
+                <button type="button" class="btn btn-outline-secondary" id="theme-btn-dark">Dark</button>
+            </div>
+        </div>
+
         <!-- Header -->
         <div class="header-section text-center">
             <h1 class="display-5 fw-bold">BIP39 Mnemonic Dotmap</h1>
@@ -137,7 +183,7 @@
 
             {% if encryption_method == 'xor' %}
             <p><strong>XOR Masking active:</strong> Each word's unencrypted dot map was XOR'ed with a unique, cryptographically secure 12-bit random key. To manually retrieve your original dot map, calculate the logical XOR of the Encrypted Dot Map and its corresponding key.</p>
-            <div class="alert alert-light border shadow-sm">
+            <div class="bg-body-tertiary border shadow-sm rounded p-3 mb-3">
                 <h5 class="fw-bold">💡 How to Decrypt Manually:</h5>
                 <p class="mb-1">Compare the encrypted dots with the key dots column by column:</p>
                 <ul class="mb-0">
@@ -179,7 +225,7 @@
             {% elif encryption_method == 'permutation' %}
             <p><strong>Bit Permutation active:</strong> All 12 columns of the dot map have been shuffled according to a cryptographically strong random permutation sequence. This prevents visual pattern recognition of your BIP39 indices.</p>
 
-            <div class="alert alert-light border shadow-sm">
+            <div class="bg-body-tertiary border shadow-sm rounded p-3 mb-3">
                 <h5 class="fw-bold">💡 How to Decrypt Manually:</h5>
                 <p class="mb-0">Use the following reference mapping card to re-order the columns. For each index, find the corresponding column number of the encrypted dot map and copy its state (○ or ●) back to the original index position.</p>
             </div>
@@ -218,7 +264,7 @@
         <!-- Results Card -->
         {% if results %}
         <div class="card p-4 mb-4">
-            <h3 class="border-bottom pb-2 mb-4 fw-bold text-dark">
+            <h3 class="border-bottom pb-2 mb-4 fw-bold text-body">
                 {% if encryption_method == 'none' %}
                     Visualization & Dot Map Table
                 {% else %}
@@ -334,7 +380,7 @@
 
         <!-- Safe Bytearray Card -->
         <div class="card p-4 mb-4">
-            <h3 class="border-bottom pb-2 mb-4 fw-bold text-dark">Safe Bytearray Transformation Output</h3>
+            <h3 class="border-bottom pb-2 mb-4 fw-bold text-body">Safe Bytearray Transformation Output</h3>
 
             <!-- Raw Words Bytearray -->
             <div class="mb-4">
@@ -391,23 +437,23 @@
                         <h5 class="modal-title fw-bold" id="beforeSecurityModalLabel">⚠️ Critical Security Advice Before Introducing Words</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body bg-light">
+                    <div class="modal-body bg-body-secondary">
                         <div class="row g-3">
                             <div class="col-md-4">
-                                <div class="p-3 bg-white rounded shadow-sm h-100">
-                                    <h6 class="fw-bold text-dark">1. Run Completely Offline</h6>
+                                <div class="p-3 bg-body rounded shadow-sm h-100">
+                                    <h6 class="fw-bold text-body">1. Run Completely Offline</h6>
                                     <p class="small text-muted mb-0">Disconnect your computer from the internet (air-gap) or run on a secure offline Live OS like Tails or Ubuntu Live.</p>
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="p-3 bg-white rounded shadow-sm h-100">
-                                    <h6 class="fw-bold text-dark">2. Disable Browser Extensions</h6>
+                                <div class="p-3 bg-body rounded shadow-sm h-100">
+                                    <h6 class="fw-bold text-body">2. Disable Browser Extensions</h6>
                                     <p class="small text-muted mb-0">Open this app in a <strong>Private / Incognito Window</strong>. Third-party extensions can scrape page inputs and leak secrets.</p>
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="p-3 bg-white rounded shadow-sm h-100">
-                                    <h6 class="fw-bold text-dark">3. Type, Do Not Paste</h6>
+                                <div class="p-3 bg-body rounded shadow-sm h-100">
+                                    <h6 class="fw-bold text-body">3. Type, Do Not Paste</h6>
                                     <p class="small text-muted mb-0">Type your recovery words manually instead of copy-pasting to prevent clipboard histories or background tools from caching your phrase.</p>
                                 </div>
                             </div>
@@ -428,29 +474,29 @@
                         <h5 class="modal-title fw-bold" id="afterSecurityModalLabel">🔒 Critical Security Actions After Generating Output</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body bg-light">
+                    <div class="modal-body bg-body-secondary">
                         <div class="row g-3">
                             <div class="col-md-3">
-                                <div class="p-3 bg-white rounded shadow-sm h-100">
-                                    <h6 class="fw-bold text-dark">1. Clear Clipboard</h6>
+                                <div class="p-3 bg-body rounded shadow-sm h-100">
+                                    <h6 class="fw-bold text-body">1. Clear Clipboard</h6>
                                     <p class="small text-muted mb-0">Copy some random dummy text (e.g., "abc") to completely wipe your clipboard history buffer.</p>
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <div class="p-3 bg-white rounded shadow-sm h-100">
-                                    <h6 class="fw-bold text-dark">2. Close Windows</h6>
+                                <div class="p-3 bg-body rounded shadow-sm h-100">
+                                    <h6 class="fw-bold text-body">2. Close Windows</h6>
                                     <p class="small text-muted mb-0">Completely close all browser tabs and clear the temporary browser memory cache.</p>
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <div class="p-3 bg-white rounded shadow-sm h-100">
-                                    <h6 class="fw-bold text-dark">3. Kill Server</h6>
+                                <div class="p-3 bg-body rounded shadow-sm h-100">
+                                    <h6 class="fw-bold text-body">3. Kill Server</h6>
                                     <p class="small text-muted mb-0">Terminate the local Flask backend server process running on your machine immediately.</p>
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <div class="p-3 bg-white rounded shadow-sm h-100">
-                                    <h6 class="fw-bold text-dark">4. Restart Device</h6>
+                                <div class="p-3 bg-body rounded shadow-sm h-100">
+                                    <h6 class="fw-bold text-body">4. Restart Device</h6>
                                     <p class="small text-muted mb-0">Reboot/restart your machine to guarantee that system RAM is completely flushed and cleared.</p>
                                 </div>
                             </div>
@@ -474,6 +520,37 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            // Theme Switcher Logic
+            const lightBtn = document.getElementById('theme-btn-light');
+            const darkBtn = document.getElementById('theme-btn-dark');
+
+            function setTheme(theme) {
+                document.documentElement.setAttribute('data-bs-theme', theme);
+                localStorage.setItem('theme', theme);
+                updateToggleButtons(theme);
+            }
+
+            function updateToggleButtons(theme) {
+                if (theme === 'dark') {
+                    darkBtn.classList.add('active', 'btn-secondary');
+                    darkBtn.classList.remove('btn-outline-secondary');
+                    lightBtn.classList.remove('active', 'btn-secondary');
+                    lightBtn.classList.add('btn-outline-secondary');
+                } else {
+                    lightBtn.classList.add('active', 'btn-secondary');
+                    lightBtn.classList.remove('btn-outline-secondary');
+                    darkBtn.classList.remove('active', 'btn-secondary');
+                    darkBtn.classList.add('btn-outline-secondary');
+                }
+            }
+
+            // Set initial toggle state on page load
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            updateToggleButtons(currentTheme);
+
+            lightBtn.addEventListener('click', () => setTheme('light'));
+            darkBtn.addEventListener('click', () => setTheme('dark'));
+
             // Show the Pre-Input Security Advice Modal once per browser session
             if (!sessionStorage.getItem('beforeModalShown')) {
                 var beforeModal = new bootstrap.Modal(document.getElementById('beforeSecurityModal'));
