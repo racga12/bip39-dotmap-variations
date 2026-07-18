@@ -71,8 +71,6 @@ To maintain maximum security, you should run this application in a completely of
 4. **Access the App:**
    Open your browser and navigate to: `http://127.0.0.1:5000`
 
----
-
 #### 🔒 Safe Offline Workflow (Air-Gapped Security)
 Since your recovery seed phrase governs the security of your cryptocurrency assets, **NEVER** type your seed phrase into a computer that is connected to the internet. Follow this safe workflow:
 
