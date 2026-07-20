@@ -1,50 +1,22 @@
-========================================================================
-                      BIP39 MNEMONIC DOTMAP VISUALIZER
-                                 CHANGELOG
-========================================================================
+BIP39 Mnemonic Dotmap Visualizer Changelog
+===========================================
 
-All notable changes to this project are documented in this file.
-This project adheres to Semantic Versioning (v1.0.0-initial).
-
-------------------------------------------------------------------------
-[1.0.0] - 2026-07-20
-------------------------------------------------------------------------
-
-Initial release of the BIP39 Mnemonic Dotmap Visualizer and Encryptor.
-This utility provides an interactive, secure, offline-first system to
-convert 12 to 24-word cryptocurrency recovery seeds into visual 12-bit
-binary dot map grids for physical engraving/metal backup.
+v1.1.0 - Standalone Offline Executable Support (Current Release)
+--------------------------------------------------------------
+* **Debian-Based OS Standalone Executable Support:** Included support for compiling the entire application (Flask backend, HTML templates, and BIP39 localized wordlists) into a single standalone, self-contained static executable for Debian-based operating systems (Tails, Debian, Ubuntu).
+* **Automatic Web Browser Launching:** Added a secure background daemon thread that automatically opens the user's default web browser to the server (http://127.0.0.1:5000) on startup for a seamless offline plug-and-play experience.
+* **Hardened Local Socket Security:** When executed in a compiled/frozen state, the web server restricts socket binding to `127.0.0.1` (localhost) rather than `0.0.0.0` (all interfaces) to prevent other devices on the local network from querying the sensitive offline seed visualization, and disables the debugging server.
+* **Ignored Build Outputs:** Added rules in `.gitignore` to prevent PyInstaller's `build/`, `dist/`, and custom `.spec` compiler configuration files from cluttering the audited git source tree.
+* **Auditing and Build Documentation:** Updated `README.md` with complete usage instructions for running pre-compiled binaries in offline Tails/Debian live sessions and instructions on how to securely audit and build the binaries themselves from source.
 
 
-### Added
-- **Interactive Web Interface**: Developed a Flask-based local web application supporting input of 12 to 24 mnemonic recovery words.
-- **Visual Binary Dot Map Grids**: Generates clean, responsive, and high-visibility 12-bit binary dot maps (using '●' and '○' symbols) corresponding to the BIP39 word indices.
-- **Advanced Encryption Layers**:
-  * XOR Masking (Vernam Cipher / One-Time Pad): XORs 12-bit word binary indices with unique, cryptographically secure random keys.
-  * Bit Permutation (P-Boxes): Shuffles the order of all 12 binary columns using a secure random permutation to break visual pattern recognition.
-- **Manual Decryption Guides**: Includes real-time mathematical walkthroughs, step-by-step XOR logical tables, and an interactive Column Re-ordering Reference Card to enable offline pen-and-paper decryption.
-- **Unencrypted Verification View**: Built a collapsible verification area to double-check raw (unencrypted) dot maps before physical engraving.
-- **Multi-Language BIP39 Wordlists**: Embedded complete 2048-word localized dictionary files for 10 languages:
-  * Chinese Simplified, Chinese Traditional, Czech, English, French, Italian, Japanese, Korean, Portuguese, and Spanish.
-- **Safe Bytearray Transmutation Outputs**: Renders hex strings and integer decimal arrays for:
-  * Raw input text (UTF-8 encoded string).
-  * Original BIP39 matched word indices (big-endian 2-byte serialization).
-  * Encrypted BIP39 matched word indices (big-endian 2-byte serialization).
-- **Security-First Modals**:
-  * Pre-Input Offline Advice Popup: Automatically guides users through running in secure, air-gapped systems and disabling browser extensions (persisted via browser sessionStorage on GET).
-  * Post-Output Cleanup Checklist: Prompts users on clipboard clearance, browser closure, Flask server termination, and system RAM flushes when results are displayed.
-- **Theme Switcher**: Added support for 'Light' and 'Dark' themes with a top-right switcher button group. Applied an inline blocking script in the HTML `<head>` to prevent the "flash-of-unstyled-content" (FOUC).
-- **Robust Test Suite (`test_app.py`)**: Authored 12 functional unit and integration tests using pytest/unittest to verify wordlist loading, strict input length limits, null byte stripping, GET/POST forms, and XOR/Permutation cryptography logic.
-
-
-### Changed
-- **Robust Wordlists Dir Mapping**: Enhanced `app.py` to transparently resolve wordlists from either 'wordlists' or 'wordslists' to prevent lookup failures across different environments.
-
-
-### Security & Sanitization
-- **Strict Length Limits**: Constrained mnemonic inputs to a maximum of 10,000 characters to prevent DoS or C-level buffer overflows.
-- **Null-Byte Stripping**: Automated stripping of null bytes ('\x00') from user input to eliminate null-byte injection vectors or core dumps.
-- **Secrets Module Encryption**: Utilized Python's `secrets` module (using cryptographically secure system entropy) instead of `random` for all XOR key generations and bit permutation shuffles.
-
-
-========================================================================
+v1.0.0 - Initial Release (Core Visualizer & Cryptographic Obfuscation)
+----------------------------------------------------------------------
+* **Word to Dot Grid Mapping:** Real-time lookup of BIP39 word indices (1 to 2048) and precise translation to 12-bit binary dot maps (○ for 0, ● for 1) in three-column readable formats for physical steel plate engraving.
+* **Localized Multilingual Support:** Dynamic detection and loading of localized BIP39 wordlists (2048 words per list, one word per line) stored under the `wordslists/` directory, supporting English, Spanish, Japanese, Korean, French, Italian, Czech, Traditional Chinese, Simplified Chinese, and Portuguese.
+* **XOR Masking Advanced Obfuscation:** Option to encrypt dot maps using a securely generated random 12-bit XOR key per word (One-Time Pad / Vernam Cipher rules) to obfuscate patterns, including manual pen-and-paper XOR decryption instructions.
+* **Bit Permutation (P-Boxes) Encryption:** Option to re-order the 12 binary bits in each word using a securely generated random column-mapping permutation key, along with manual left-to-right column-reordering reference cards.
+* **Hex and Decimal Bytearray Output:** Real-time generation of matched-words bytearrays and encrypted indices bytearrays in hex and decimal list formats.
+* **Bootstrap 5.3 Theme Switcher:** Fully integrated, native theme switcher supporting light and dark modes with preferences persisted in `localStorage` and applied with blocking inline scripts in `<head>` to prevent flashing.
+* **Hardened Inputs & Sanitization:** Strict input limit validation (max 10,000 characters) and null-byte (`\x00`) stripping to safely prevent core dumps or C-level buffer overflows.
+* **Air-gapped Security Modals:** Pre-input warning advice popups (session-restricted to original GET requests to prevent post-submit annoyance) and a post-output local device cleanup checklist modal for air-gapped terminal hygiene.
