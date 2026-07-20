@@ -110,7 +110,7 @@ To maintain maximum security, you should run this application in a completely of
 #### 🔒 Safe Offline Workflow (Air-Gapped Security)
 Since your recovery seed phrase governs the security of your cryptocurrency assets, **NEVER** type your seed phrase into a computer that is connected to the internet. Follow this safe workflow:
 
-[Recommended Workflow](https://github.com/racga12/bip39-dotmap-variations/wiki/BIP39-Mnemonic-Dotmap-Visualizer-Documentation#recommended-air-gapped-physical-workflow)
+[Recommended Workflow](https://github.com/racga12/bip39-dotmap-encryptor-visualizer/wiki/BIP39-Mnemonic-Dotmap-Visualizer-Documentation#3-recommended-air-gapped-physical-workflow)
 
 ---
 
