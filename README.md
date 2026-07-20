@@ -1,7 +1,8 @@
-# bip39-dotmap-variations
+# bip39-dotmap-encryptor-visualizer
 
-## Work In Progress
-
+### Work In Progress/TO-DO:
+* Make user friendly version and guide to execute the app in a offline Linux Live session.
+* Multi Language support
 
 ## Table of Contents
 1. [How It Works](#how-it-works)
