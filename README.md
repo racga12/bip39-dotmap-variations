@@ -1,7 +1,7 @@
 # bip39-dotmap-encryptor-visualizer
 
 ### Work In Progress/TO-DO:
-* Make user friendly version and guide to execute the app in a offline Linux Live session.
+* [x] Make user friendly version and guide to execute the app in a offline Linux Live session.
 * Multi Language support
 
 ## Table of Contents
@@ -71,6 +71,36 @@ To maintain maximum security, you should run this application in a completely of
    ```
 4. **Access the App:**
    Open your browser and navigate to: `http://127.0.0.1:5000`
+
+#### 🐧 Standalone Executable for Offline Linux Live Sessions (Tails / Debian / Ubuntu)
+For convenience and maximum air-gapped security, we provide a fully self-contained, standalone compiled Linux executable that runs out-of-the-box in any live offline Linux distribution (such as Tails, Debian Live, or Ubuntu Live) without requiring any Python, Flask, or package installations!
+
+##### How to Run the Standalone Executable:
+1. **Download/Copy the Executable:**
+   Copy the compiled `dist/bip39-dotmap-visualizer` binary onto an offline USB drive.
+2. **Run on the Offline Live Linux OS:**
+   Insert the USB drive into your offline/air-gapped computer, open a terminal on the USB mount folder, and run:
+   ```bash
+   # Grant execution permissions (if not already granted)
+   chmod +x bip39-dotmap-visualizer
+
+   # Run the executable
+   ./bip39-dotmap-visualizer
+   ```
+3. **That's it!**
+   The app will start the secure local Flask server on `127.0.0.1:5000` and automatically open your default web browser to the app dashboard.
+
+##### How to Compile/Build the Standalone Executable Yourself (For Security Audits):
+If you want to audit the code and build the executable yourself for absolute cryptographic peace-of-mind, you can compile it using **PyInstaller** on any Debian/Ubuntu system:
+1. Install dependencies:
+   ```bash
+   pip install Flask pyinstaller
+   ```
+2. Run the compiler:
+   ```bash
+   pyinstaller --onefile --add-data "templates:templates" --add-data "wordslists:wordslists" --name "bip39-dotmap-visualizer" app.py
+   ```
+3. The standalone binary will be generated under the `dist/` directory as `dist/bip39-dotmap-visualizer`.
 
 #### 🔒 Safe Offline Workflow (Air-Gapped Security)
 Since your recovery seed phrase governs the security of your cryptocurrency assets, **NEVER** type your seed phrase into a computer that is connected to the internet. Follow this safe workflow:
