@@ -1,8 +1,8 @@
 # bip39-dotmap-encryptor-visualizer
 
 ### Work In Progress/TO-DO:
-* Make user friendly version and guide to execute the app in a offline Linux Live session.
-* Multi Language support
+* [x] Make user friendly version and guide to execute the app in a offline Linux Live session.
+* [ ] Multi Language support
 
 ## Table of Contents
 1. [How It Works](#how-it-works)
@@ -51,6 +51,39 @@ Instead of storing recovery words in plain text—which is highly vulnerable to 
 This repository includes a secure, self-hosted web-based visualization utility. It automates word validation, language mapping, binary dot map visualization, advanced encryption (XOR / Bit Permutation), and hex/decimal bytearray encoding.
 
 [For know more about internal mechanics, security measures, and cryptographic flows of the application visit wiki documentation](https://github.com/racga12/bip39-dotmap-variations/wiki/BIP39-Mnemonic-Dotmap-Visualizer-Documentation)
+
+#### 🐧 Standalone Executable for Offline Linux Live Sessions (Tails / Debian / Ubuntu)
+For convenience and maximum air-gapped security, we provide a fully self-contained, standalone compiled Linux executable that runs out-of-the-box in any live offline Linux distribution (such as Tails, Debian Live, or Ubuntu Live) without requiring any Python, Flask, or package installations!
+
+##### How to Run the Standalone Executable:
+1. **Download/Copy the Executable:**
+   Download the compiled [released **bip39-dotmap-visualizer**](https://github.com/racga12/bip39-dotmap-encryptor-visualizer/releases) binary onto an created linux live USB drive or an other USB drive.
+2. **Run on the Offline Live Linux OS:**
+   Insert the USB drive into your offline/air-gapped computer, open a terminal on the USB mount folder, and run:
+   ```bash
+   # Grant execution permissions (if not already granted)
+   chmod +x bip39-dotmap-visualizer
+   
+   # Run the executable
+   ./bip39-dotmap-visualizer
+   ```
+   You can open the executable file directly from file manager too. But in the case you want to kill the app before turn disconnect your live session just type:
+   `pkill -f bip39-dotmap-visualizer`
+   
+4. **That's it!**
+   The app will start the secure local Flask server on `127.0.0.1:5000` and automatically open your default web browser to the app dashboard.
+
+##### How to Compile/Build the Standalone Executable Yourself (For Security Audits):
+If you want to audit the code and build the executable yourself for absolute cryptographic peace-of-mind, you can compile it using **PyInstaller** on any Debian/Ubuntu system:
+1. Install dependencies:
+   ```bash
+   pip install Flask pyinstaller
+   ```
+2. Run the compiler:
+   ```bash
+   pyinstaller --onefile --add-data "templates:templates" --add-data "wordslists:wordslists" --name "bip39-dotmap-visualizer" app.py
+   ```
+3. The standalone binary will be generated under the `dist/` directory as `dist/bip39-dotmap-visualizer`.
 
 #### 🚀 How to Install and Run Locally
 To maintain maximum security, you should run this application in a completely offline environment.
