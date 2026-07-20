@@ -553,11 +553,13 @@
             darkBtn.addEventListener('click', () => setTheme('dark'));
 
             // Show the Pre-Input Security Advice Modal once per browser session
+            {% if request.method == 'GET' %}
             if (!sessionStorage.getItem('beforeModalShown')) {
                 var beforeModal = new bootstrap.Modal(document.getElementById('beforeSecurityModal'));
                 beforeModal.show();
                 sessionStorage.setItem('beforeModalShown', 'true');
             }
+            {% endif %}
 
             // Show the Post-Output Security Advice Modal automatically when results are displayed
             {% if results %}
