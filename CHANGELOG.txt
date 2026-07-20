@@ -1,0 +1,22 @@
+BIP39 Mnemonic Dotmap Visualizer Changelog
+===========================================
+
+v1.1.0 - Standalone Offline Executable Support (Current Release)
+--------------------------------------------------------------
+* **Debian-Based OS Standalone Executable Support:** Included support for compiling the entire application (Flask backend, HTML templates, and BIP39 localized wordlists) into a single standalone, self-contained static executable for Debian-based operating systems (Tails, Debian, Ubuntu).
+* **Automatic Web Browser Launching:** Added a secure background daemon thread that automatically opens the user's default web browser to the server (http://127.0.0.1:5000) on startup for a seamless offline plug-and-play experience.
+* **Hardened Local Socket Security:** When executed in a compiled/frozen state, the web server restricts socket binding to `127.0.0.1` (localhost) rather than `0.0.0.0` (all interfaces) to prevent other devices on the local network from querying the sensitive offline seed visualization, and disables the debugging server.
+* **Ignored Build Outputs:** Added rules in `.gitignore` to prevent PyInstaller's `build/`, `dist/`, and custom `.spec` compiler configuration files from cluttering the audited git source tree.
+* **Auditing and Build Documentation:** Updated `README.md` with complete usage instructions for running pre-compiled binaries in offline Tails/Debian live sessions and instructions on how to securely audit and build the binaries themselves from source.
+
+
+v1.0.0 - Initial Release (Core Visualizer & Cryptographic Obfuscation)
+----------------------------------------------------------------------
+* **Word to Dot Grid Mapping:** Real-time lookup of BIP39 word indices (1 to 2048) and precise translation to 12-bit binary dot maps (○ for 0, ● for 1) in three-column readable formats for physical steel plate engraving.
+* **Localized Multilingual Support:** Dynamic detection and loading of localized BIP39 wordlists (2048 words per list, one word per line) stored under the `wordslists/` directory, supporting English, Spanish, Japanese, Korean, French, Italian, Czech, Traditional Chinese, Simplified Chinese, and Portuguese.
+* **XOR Masking Advanced Obfuscation:** Option to encrypt dot maps using a securely generated random 12-bit XOR key per word (One-Time Pad / Vernam Cipher rules) to obfuscate patterns, including manual pen-and-paper XOR decryption instructions.
+* **Bit Permutation (P-Boxes) Encryption:** Option to re-order the 12 binary bits in each word using a securely generated random column-mapping permutation key, along with manual left-to-right column-reordering reference cards.
+* **Hex and Decimal Bytearray Output:** Real-time generation of matched-words bytearrays and encrypted indices bytearrays in hex and decimal list formats.
+* **Bootstrap 5.3 Theme Switcher:** Fully integrated, native theme switcher supporting light and dark modes with preferences persisted in `localStorage` and applied with blocking inline scripts in `<head>` to prevent flashing.
+* **Hardened Inputs & Sanitization:** Strict input limit validation (max 10,000 characters) and null-byte (`\x00`) stripping to safely prevent core dumps or C-level buffer overflows.
+* **Air-gapped Security Modals:** Pre-input warning advice popups (session-restricted to original GET requests to prevent post-submit annoyance) and a post-output local device cleanup checklist modal for air-gapped terminal hygiene.
