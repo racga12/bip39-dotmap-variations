@@ -1,14 +1,24 @@
 import os
 import re
+import sys
+import threading
 from flask import Flask, render_template, request, jsonify
 
-app = Flask(__name__)
+# Identify if the app is packaged/frozen with PyInstaller
+if getattr(sys, 'frozen', False):
+    # PyInstaller creates a temp folder and stores path in _MEIPASS
+    base_dir = sys._MEIPASS
+    template_folder = os.path.join(base_dir, 'templates')
+    app = Flask(__name__, template_folder=template_folder)
+else:
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    app = Flask(__name__)
 
 # Constants
 # Support both 'wordlists' and 'wordslists' directories to be robust
-WORDLISTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'wordlists')
+WORDLISTS_DIR = os.path.join(base_dir, 'wordlists')
 if not os.path.exists(WORDLISTS_DIR):
-    WORDLISTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'wordslists')
+    WORDLISTS_DIR = os.path.join(base_dir, 'wordslists')
 
 MAX_INPUT_LENGTH = 10000  # Prevent denial of service or overflow in rendering/handling
 
@@ -243,5 +253,23 @@ def index():
     )
 
 if __name__ == '__main__':
-    # Default to port 5000
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    # Automatically open default web browser when run directly
+    def open_browser():
+        import time
+        import webbrowser
+        time.sleep(1.5)
+        try:
+            webbrowser.open("http://127.0.0.1:5000")
+        except Exception as e:
+            print(f"Could not open browser automatically: {e}")
+
+    is_frozen = getattr(sys, 'frozen', False)
+    if not is_frozen:
+        # Avoid opening twice on reloader reload
+        if not os.environ.get("WERKZEUG_RUN_MAIN"):
+            threading.Thread(target=open_browser, daemon=True).start()
+    else:
+        threading.Thread(target=open_browser, daemon=True).start()
+
+    # Default to port 5000. For frozen app, listen on localhost (127.0.0.1) for extra security.
+    app.run(host='127.0.0.1' if is_frozen else '0.0.0.0', port=5000, debug=not is_frozen)
