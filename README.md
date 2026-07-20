@@ -4,7 +4,7 @@ A secure, educational utility to convert cryptocurrency BIP39 mnemonic seed phra
 
 > Originally based on the OneKeyHQ repository: https://github.com/OneKeyHQ/bip39-dotmap
 
-#### Work In Progress/TO-DO:
+#### 📋 Work In Progress/TO-DO:
 * [x] Make user friendly version and guide to execute the app in a offline Linux Live session.
 * [ ] Multi Language support
 * [ ] User friendly guide to setting up a live Linux OS on a USB drive to run the application.
