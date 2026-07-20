@@ -80,6 +80,6 @@ For comprehensive operational guides, cryptographic definitions, and instruction
   * 👁️ [Detailed info: Decoy Dots (Grid Steganography) Theory](https://github.com/racga12/bip39-dotmap-variations/wiki/Decoy-Dots-(Grid-Steganography))
 
 
-### 📋 *Link to original wordlists to the bitcoin repo*
+### 📋 *Link to original wordlists from bitcoin repo*
 
 [bip-0039 wordlists](https://github.com/bitcoin/bips/tree/master/bip-0039)
