@@ -38,7 +38,10 @@ class TestBIP39DotmapApp(unittest.TestCase):
         # Test default GET request loads successfully
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
-        self.assertIn("BIP39 Mnemonic Dotmap", response.data.decode('utf-8'))
+        data_str = response.data.decode('utf-8')
+        self.assertIn("BIP39 Mnemonic Dotmap", data_str)
+        # Ensure that the automatic modal displaying Javascript code is present in GET response
+        self.assertIn("sessionStorage.getItem('beforeModalShown')", data_str)
 
     def test_post_valid_12_words(self):
         # 12 valid words in English
@@ -49,6 +52,8 @@ class TestBIP39DotmapApp(unittest.TestCase):
         })
         self.assertEqual(response.status_code, 200)
         data_str = response.data.decode('utf-8')
+        # Ensure that the automatic modal displaying Javascript code is not rendered on POST response
+        self.assertNotIn("sessionStorage.getItem('beforeModalShown')", data_str)
         # Results table should be rendered
         self.assertIn("Visualization & Dot Map Table", data_str)
         self.assertIn("abandon", data_str)
