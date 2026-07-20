@@ -33,7 +33,7 @@ Instead of storing recovery words in vulnerable plain text, this project maps da
 
 ## 🚀 Quick Start & Installation
 
-To maintain absolute maximum security, you should run this application exclusively in a completely offline, air-gapped environment.
+To maintain absolute maximum security, you should run this application exclusively in a [completely offline, air-gapped environment](https://github.com/racga12/bip39-dotmap-encryptor-visualizer/wiki/BIP39-Mnemonic-Dotmap-Visualizer-Documentation#3-recommended-air-gapped-physical-workflow).
 
 ### Option A: Standalone Binary (Recommended for Tails/Debian Live OS)
 No Python or dependencies required.
@@ -71,9 +71,10 @@ pyinstaller --onefile --add-data "templates:templates" --add-data "wordslists:wo
 
 For comprehensive operational guides, cryptographic definitions, and instructions for complete offline disaster recovery by hand, please visit our official documentation pages:
 
+* 📖 [Wiki Home Page](https://github.com/racga12/bip39-dotmap-encryptor-visualizer/wiki)
 * 📕 [Normal/Original Method Explanation](https://github.com/racga12/bip39-dotmap-encryptor-visualizer/wiki/Normal-Method)
 * 🔎 [Detailed application documentation](https://github.com/racga12/bip39-dotmap-variations/wiki/BIP39-Mnemonic-Dotmap-Visualizer-Documentation)
-* 🔒 [Air-Gapped Physical Workflow Guide](https://github.com/racga12/bip39-dotmap-encryptor-visualizer/wiki/BIP39-Mnemonic-Dotmap-Visualizer-Documentation#3-recommended-air-gapped-physical-workflow)
+  * 🔒 [Air-Gapped Physical Workflow Guide](https://github.com/racga12/bip39-dotmap-encryptor-visualizer/wiki/BIP39-Mnemonic-Dotmap-Visualizer-Documentation#3-recommended-air-gapped-physical-workflow)
 * 🪟 [Overview of Additional Encryption Methods
 ](https://github.com/racga12/bip39-dotmap-encryptor-visualizer/wiki/Overview-of-Additional-Encryption-Methods)
   * 🧮 [Detailed info: XOR Masking (Vernam Cipher) Recovery](https://github.com/racga12/bip39-dotmap-variations/wiki/XOR-Masking-(Vernam-Cipher))
