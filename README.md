@@ -42,7 +42,7 @@ No Python or dependencies required.
    ```bash
    chmod +x bip39-dotmap-visualizer
    ./bip39-dotmap-visualizer
-3. Access via browser at `http://127.0.0.1:5000`. Kill the process anytime using *Ctrl + C** if you opened from console or `pkill -f bip39-dotmap-visualizer` if you used the file explorer.
+3. Access via browser at `http://127.0.0.1:5000`. Kill the process anytime using **Ctrl + C** if you opened from console or `pkill -f bip39-dotmap-visualizer` if you used the file explorer.
 
 ### Option B: Local Development (Python 3.12+)
 1. Clone the repo and install Flask:
