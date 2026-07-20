@@ -8,10 +8,12 @@
 1. [How It Works](#how-it-works)
 2. [Features & Customization](#features--customization)
 3. [Interactive Web Application Guide](#%EF%B8%8F-interactive-web-application-guide)
+    -  [Standalone Executable for Offline Linux Live Sessions](#-standalone-executable-for-offline-linux-live-sessions-tails--debian--ubuntu)
+    -  [How to Install and Run Locally](#-how-to-install-and-run-locally)
 4. [Theoretical Logic & Manual Offline Encryption/Decryption](#-theoretical-logic--manual-offline-encryptiondecryption)
-5. [Overview of Additional Encryption Methods](#overview-of-additional-encryption-methods)
-6. [BIP 39 wordlists](#bip-39-wordlists-from-bips-repo-by-bitcoin)
-7. [Normal Method](#normal-method)
+6. [Overview of Additional Encryption Methods](#overview-of-additional-encryption-methods)
+7. [BIP 39 wordlists](#bip-39-wordlists-from-bips-repo-by-bitcoin)
+8. [Normal Method](#normal-method)
 
 <table style="border: none; border-collapse: collapse; width: 100%;">
   <tr style="border: none;">
